@@ -1,28 +1,20 @@
 package com.brittank88.adastra.api.item;
 
 import com.brittank88.adastra.AdAstra;
-import com.brittank88.adastra.client.AdAstraClient;
+import com.brittank88.adastra.client.render.SingularityItemRenderer;
 import com.brittank88.adastra.group.AdAstraGroups;
 import com.brittank88.adastra.util.ColourUtil;
 import com.brittank88.adastra.util.NumeralUtil;
 import io.wispforest.owo.itemgroup.OwoItemSettings;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Rarity;
-import net.minecraft.util.math.*;
 import net.minecraft.util.registry.Registry;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 /**
@@ -33,7 +25,7 @@ import java.util.function.Function;
  * @author brittank88
  */
 @SuppressWarnings("unused")
-public abstract class AbstractSingularityItem extends Item implements IHaloRenderItem, BuiltinItemRendererRegistry.DynamicItemRenderer {
+public abstract class AbstractSingularityItem extends Item implements IHaloRenderItem {
 
     public static final SpriteIdentifier DEFAULT_BASE_SPRITE_ID      = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdAstra.id("item/singularity/base"));
     public static final SpriteIdentifier DEFAULT_CORE_SPRITE_ID      = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdAstra.id("item/singularity/core"));
@@ -74,7 +66,7 @@ public abstract class AbstractSingularityItem extends Item implements IHaloRende
         this.baseSpriteRotationSpeed = baseSpriteRotationSpeed;
         this.coreSpriteRotationSpeed = coreSpriteRotationSpeed;
 
-        BuiltinItemRendererRegistry.INSTANCE.register(this, this);
+        BuiltinItemRendererRegistry.INSTANCE.register(this, new SingularityItemRenderer(this));
     }
 
     public AbstractSingularityItem(ItemStack material, OwoItemSettings settings, int tier, SpriteIdentifier baseSpriteID, SpriteIdentifier coreSpriteID) {
@@ -188,92 +180,4 @@ public abstract class AbstractSingularityItem extends Item implements IHaloRende
      * @return The remaining tiers of singularities, up to the specified tier.
      */
     public abstract List<? extends AbstractSingularityItem> generateUpToTier(int tier);
-
-    private final AtomicBoolean getTickFailed = new AtomicBoolean(false);
-
-    /**
-     * Render function for singularities.
-     *
-     * @param stack The {@link ItemStack}.
-     * @param mode The {@link ModelTransformation.Mode}.
-     * @param matrices The {@link MatrixStack}.
-     * @param vertexConsumers The {@link VertexConsumerProvider}.
-     * @param light The lighting integer.
-     * @param overlay The overlay integer.
-     */
-    @Override public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-
-        // Get the singularity's colour.
-        int colour = this.getColor();
-        float r = ColorHelper.Argb.getRed(colour);
-        float g = ColorHelper.Argb.getGreen(colour);
-        float b = ColorHelper.Argb.getBlue(colour);
-        float a = ColorHelper.Argb.getAlpha(colour);
-
-        float tickDelta = MinecraftClient.getInstance().getTickDelta();
-        this.renderBase(stack, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdAstraClient.TICK_COUNT, tickDelta);
-        this.renderCore(stack, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdAstraClient.TICK_COUNT, tickDelta);
-    }
-
-    private void renderBase(
-            ItemStack stack,
-            ModelTransformation.Mode mode,
-            MatrixStack matrices,
-            VertexConsumerProvider vertexConsumers,
-            int light, int overlay,
-            float r, float g, float b, float a,
-            float ticks, float tickDelta
-    ) {
-
-        // Push matrices.
-        matrices.push();
-
-        // Rotate matrices.
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((this.coreSpriteRotationSpeed * (ticks + tickDelta)) % 360));
-
-        // Get current normal and position matrix.
-        MatrixStack.Entry entry = matrices.peek();
-        Matrix4f positionMatrix = entry.getPositionMatrix();
-        Matrix3f normalMatrix = entry.getNormalMatrix();
-
-        // Draw base sprite.
-        VertexConsumer baseConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(this.baseSpriteID.getTextureId()));
-        baseConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-        baseConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-        baseConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-        baseConsumer.vertex(positionMatrix, 1, 0, 0).color(r, g, b, a).texture(1, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-
-        // Pop matrices.
-        matrices.pop();
-    }
-
-    private void renderCore(
-            ItemStack stack,
-            ModelTransformation.Mode mode,
-            MatrixStack matrices,
-            VertexConsumerProvider vertexConsumers,
-            int light, int overlay,
-            float r, float g, float b, float a,
-            float ticks, float tickDelta
-    ) {
-
-        // Push and rotate matrices.
-        matrices.push();
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((this.coreSpriteRotationSpeed * (ticks + tickDelta)) % 360));
-
-        // Get current normal and position matrix.
-        MatrixStack.Entry entry = matrices.peek();
-        Matrix4f positionMatrix = entry.getPositionMatrix();
-        Matrix3f normalMatrix = entry.getNormalMatrix();
-
-        // Draw core sprite.
-        VertexConsumer coreConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(this.baseSpriteID.getTextureId()));
-        coreConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-        coreConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-        coreConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-        coreConsumer.vertex(positionMatrix, 1, 0, 0).color(r, g, b, a).texture(1, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
-
-        // Pop matrices.
-        matrices.pop();
-    }
 }
