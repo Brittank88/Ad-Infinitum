@@ -1,0 +1,3 @@
+accessWidener v1 named
+accessible    field    net/minecraft/client/texture/Sprite    images    [Lnet/minecraft/client/texture/NativeImage;
+accessible    field    net/minecraft/client/texture/Sprite    animation    Lnet/minecraft/client/texture/Sprite$Animation;

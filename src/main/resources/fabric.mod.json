@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "ad-astra",
+  "version": "${version}",
+  "name": "Ad Astra",
+  "description": "A reimagining of Avaritia, for Fabric!",
+  "authors": [
+    "Brittank88"
+  ],
+  "contact": {
+    "website": "https://github.com/Brittank88"
+  },
+  "license": "MIT",
+  "icon": "assets/ad-astra/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.brittank88.adastra.client.AdAstraClient"
+    ],
+    "main": [
+      "com.brittank88.adastra.AdAstra"
+    ]
+  },
+  "mixins": [
+    "ad-astra.mixins.json"
+  ],
+  "accessWidener": "ad-astra.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.14.8",
+    "fabric": "*",
+    "minecraft": "1.18.2"
+  }
+}
