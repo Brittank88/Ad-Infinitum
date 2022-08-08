@@ -1,13 +1,13 @@
 package com.brittank88.adastra.api.item;
 
 import com.brittank88.adastra.AdAstra;
+import com.brittank88.adastra.client.AdAstraClient;
 import com.brittank88.adastra.group.AdAstraGroups;
 import com.brittank88.adastra.util.ColourUtil;
 import com.brittank88.adastra.util.NumeralUtil;
 import io.wispforest.owo.itemgroup.OwoItemSettings;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -17,7 +17,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.math.*;
 import net.minecraft.util.registry.Registry;
@@ -211,28 +210,9 @@ public abstract class AbstractSingularityItem extends Item implements IHaloRende
         float b = ColorHelper.Argb.getBlue(colour);
         float a = ColorHelper.Argb.getAlpha(colour);
 
-        // Get current tick for rotation.
-        long ticks = 0;
-        if (!getTickFailed.get()) {
-            try {
-                MinecraftClient mc = MinecraftClient.getInstance();
-                MinecraftServer server;
-                if (mc.isIntegratedServerRunning()) server = mc.getServer();
-                else {
-                    ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                    if (player == null) throw new NullPointerException("Player is null.");
-                    server = player.getServer();
-                }
-                if (server == null) throw new NullPointerException("Server is null.");
-                ticks = server.getTicks();
-            } catch (NullPointerException e) {
-                AdAstra.LOGGER.error("Could not get server or player ticks. Using 0 as ticks.", e);
-                getTickFailed.set(true);
-            }
-        }
-
-        this.renderBase(stack, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, ticks);
-        this.renderCore(stack, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, ticks);
+        float tickDelta = MinecraftClient.getInstance().getTickDelta();
+        this.renderBase(stack, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdAstraClient.TICK_COUNT, tickDelta);
+        this.renderCore(stack, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdAstraClient.TICK_COUNT, tickDelta);
     }
 
     private void renderBase(
@@ -242,37 +222,26 @@ public abstract class AbstractSingularityItem extends Item implements IHaloRende
             VertexConsumerProvider vertexConsumers,
             int light, int overlay,
             float r, float g, float b, float a,
-            long ticks
+            float ticks, float tickDelta
     ) {
 
         // Push matrices.
         matrices.push();
 
         // Rotate matrices.
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(ticks * this.getBaseSpriteRotationSpeed()));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((this.coreSpriteRotationSpeed * (ticks + tickDelta)) % 360));
 
         // Get current normal and position matrix.
-        Matrix4f positionMatrix = matrices.peek().getPositionMatrix();
-        Matrix3f normalMatrix = matrices.peek().getNormalMatrix();
-
-        // Generate vectors for transformation.
-        Vector4f v1 = new Vector4f(1, 1, 0, 1);
-        Vector4f v2 = new Vector4f(0, 1, 0, 1);
-        Vector4f v3 = new Vector4f(0, 0, 0, 1);
-        Vector4f v4 = new Vector4f(1, 0, 0, 1);
-
-        // Transform vectors by the position matrix.
-        v1.transform(positionMatrix);
-        v2.transform(positionMatrix);
-        v3.transform(positionMatrix);
-        v4.transform(positionMatrix);
+        MatrixStack.Entry entry = matrices.peek();
+        Matrix4f positionMatrix = entry.getPositionMatrix();
+        Matrix3f normalMatrix = entry.getNormalMatrix();
 
         // Draw base sprite.
-        VertexConsumer baseConsumer = this.baseSpriteID.getVertexConsumer(vertexConsumers, RenderLayer::getItemEntityTranslucentCull);
-        baseConsumer.vertex(v1.getX(), v1.getY(), v1.getZ(), r, g, b, a, 1, 0, overlay, light, 0, 0, 1);
-        baseConsumer.vertex(v2.getX(), v2.getY(), v2.getZ(), r, g, b, a, 0, 0, overlay, light, 0, 0, 1);
-        baseConsumer.vertex(v3.getX(), v3.getY(), v3.getZ(), r, g, b, a, 0, 1, overlay, light, 0, 0, 1);
-        baseConsumer.vertex(v4.getX(), v4.getY(), v4.getZ(), r, g, b, a, 1, 1, overlay, light, 0, 0, 1);
+        VertexConsumer baseConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(this.baseSpriteID.getTextureId()));
+        baseConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
+        baseConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
+        baseConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
+        baseConsumer.vertex(positionMatrix, 1, 0, 0).color(r, g, b, a).texture(1, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
 
         // Pop matrices.
         matrices.pop();
@@ -285,35 +254,24 @@ public abstract class AbstractSingularityItem extends Item implements IHaloRende
             VertexConsumerProvider vertexConsumers,
             int light, int overlay,
             float r, float g, float b, float a,
-            long ticks
+            float ticks, float tickDelta
     ) {
 
         // Push and rotate matrices.
         matrices.push();
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(ticks * this.getCoreSpriteRotationSpeed()));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((this.coreSpriteRotationSpeed * (ticks + tickDelta)) % 360));
 
         // Get current normal and position matrix.
-        Matrix4f positionMatrix = matrices.peek().getPositionMatrix();
-        Matrix3f normalMatrix = matrices.peek().getNormalMatrix();
-
-        // Generate vectors for transformation.
-        Vector4f v1 = new Vector4f(1, 1, 0.1F, 1);
-        Vector4f v2 = new Vector4f(0, 1, 0.1F, 1);
-        Vector4f v3 = new Vector4f(0, 0, 0.1F, 1);
-        Vector4f v4 = new Vector4f(1, 0, 0.1F, 1);
-
-        // Transform vectors by the position matrix.
-        v1.transform(positionMatrix);
-        v2.transform(positionMatrix);
-        v3.transform(positionMatrix);
-        v4.transform(positionMatrix);
+        MatrixStack.Entry entry = matrices.peek();
+        Matrix4f positionMatrix = entry.getPositionMatrix();
+        Matrix3f normalMatrix = entry.getNormalMatrix();
 
         // Draw core sprite.
-        VertexConsumer coreConsumer = this.coreSpriteID.getVertexConsumer(vertexConsumers, RenderLayer::getItemEntityTranslucentCull);
-        coreConsumer.vertex(v1.getX(), v1.getY(), v1.getZ(), r, g, b, a, 1, 0, overlay, light, 0, 0, 1);
-        coreConsumer.vertex(v2.getX(), v2.getY(), v2.getZ(), r, g, b, a, 0, 0, overlay, light, 0, 0, 1);
-        coreConsumer.vertex(v3.getX(), v3.getY(), v3.getZ(), r, g, b, a, 0, 1, overlay, light, 0, 0, 1);
-        coreConsumer.vertex(v4.getX(), v4.getY(), v4.getZ(), r, g, b, a, 1, 1, overlay, light, 0, 0, 1);
+        VertexConsumer coreConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(this.baseSpriteID.getTextureId()));
+        coreConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
+        coreConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
+        coreConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
+        coreConsumer.vertex(positionMatrix, 1, 0, 0).color(r, g, b, a).texture(1, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
 
         // Pop matrices.
         matrices.pop();
