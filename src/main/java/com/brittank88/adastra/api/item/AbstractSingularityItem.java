@@ -1,7 +1,7 @@
 package com.brittank88.adastra.api.item;
 
 import com.brittank88.adastra.AdAstra;
-import com.brittank88.adastra.client.render.SingularityItemRenderer;
+import com.brittank88.adastra.client.render.item.SingularityItemRenderer;
 import com.brittank88.adastra.group.AdAstraGroups;
 import com.brittank88.adastra.util.ColourUtil;
 import com.brittank88.adastra.util.NumeralUtil;
@@ -27,8 +27,8 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 public abstract class AbstractSingularityItem extends Item implements IHaloRenderItem {
 
-    public static final SpriteIdentifier DEFAULT_BASE_SPRITE_ID      = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdAstra.id("item/singularity/base"));
-    public static final SpriteIdentifier DEFAULT_CORE_SPRITE_ID      = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdAstra.id("item/singularity/core"));
+    public static final SpriteIdentifier DEFAULT_BASE_SPRITE_ID      = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdAstra.id("textures/item/singularity/base.png"));
+    public static final SpriteIdentifier DEFAULT_CORE_SPRITE_ID      = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdAstra.id("textures/item/singularity/core.png"));
     public static final float            DEFAULT_BASE_ROTATION_SPEED =  1F                                                                                               ;
     public static final float            DEFAULT_CORE_ROTATION_SPEED = -0.5F                                                                                             ;
     public static final int              DEFAULT_TIER                = 1                                                                                                 ;
@@ -73,24 +73,28 @@ public abstract class AbstractSingularityItem extends Item implements IHaloRende
         this(material, settings, tier, baseSpriteID, coreSpriteID, DEFAULT_BASE_ROTATION_SPEED, DEFAULT_CORE_ROTATION_SPEED);
     }
     public AbstractSingularityItem(ItemStack material, OwoItemSettings settings, int tier) {
-        this(material, settings, tier, DEFAULT_BASE_SPRITE_ID, DEFAULT_CORE_SPRITE_ID, DEFAULT_BASE_ROTATION_SPEED, DEFAULT_CORE_ROTATION_SPEED);
+        this(material, settings, tier, DEFAULT_BASE_SPRITE_ID, DEFAULT_CORE_SPRITE_ID);
     }
     public AbstractSingularityItem(ItemStack material, OwoItemSettings settings) {
-        this(material, settings, DEFAULT_TIER, DEFAULT_BASE_SPRITE_ID, DEFAULT_CORE_SPRITE_ID, DEFAULT_BASE_ROTATION_SPEED, DEFAULT_CORE_ROTATION_SPEED);
+        this(material, settings, DEFAULT_TIER);
     }
     public AbstractSingularityItem(ItemStack material) {
-        this(material, DEFAULT_SETTINGS, DEFAULT_TIER, DEFAULT_BASE_SPRITE_ID, DEFAULT_CORE_SPRITE_ID, DEFAULT_BASE_ROTATION_SPEED, DEFAULT_CORE_ROTATION_SPEED);
+        this(material, DEFAULT_SETTINGS);
     }
 
     /**
-     * Returns the singularity base {@link SpriteIdentifier} - by default, {@link #DEFAULT_BASE_SPRITE_ID}.
+     * Returns the singularity base {@link SpriteIdentifier}.
+     * <br /><br />
+     * By default, this is the sprite provided by Ad Astra.
      *
      * @return The {@link SpriteIdentifier} for the base sprite.
      */
     public SpriteIdentifier getBaseSprite() { return baseSpriteID; }
 
     /**
-     * Returns the singularity core {@link SpriteIdentifier} - by default, {@link #DEFAULT_CORE_SPRITE_ID}.
+     * Returns the singularity core {@link SpriteIdentifier}.
+     * <br /><br />
+     * By default, this is the sprite provided by Ad Astra.
      *
      * @return The {@link SpriteIdentifier} for the core sprite.
      */
