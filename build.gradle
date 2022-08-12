@@ -44,7 +44,7 @@ dependencies {
 
 loom {
     //noinspection GroovyAssignabilityCheck
-    accessWidenerPath = file("src/main/resources/ad-astra.accesswidener")
+    accessWidenerPath = file("src/main/resources/ad-infinitum.accesswidener")
 }
 
 processResources {

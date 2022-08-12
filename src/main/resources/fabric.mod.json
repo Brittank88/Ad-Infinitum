@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "ad-astra",
+  "id": "ad-infinitum",
   "version": "${version}",
-  "name": "Ad Astra",
+  "name": "Ad Infinitum",
   "description": "A reimagining of Avaritia, for Fabric!",
   "authors": [
     "Brittank88"
@@ -11,20 +11,20 @@
     "website": "https://github.com/Brittank88"
   },
   "license": "MIT",
-  "icon": "assets/ad-astra/icon.png",
+  "icon": "assets/ad-infinitum/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.brittank88.adastra.client.AdAstraClient"
+      "com.brittank88.adinfinitum.client.AdInfinitumClient"
     ],
     "main": [
-      "com.brittank88.adastra.AdAstra"
+      "com.brittank88.adinfinitum.AdInfinitum"
     ]
   },
   "mixins": [
-    "ad-astra.mixins.json"
+    "ad-infinitum.mixins.json"
   ],
-  "accessWidener": "ad-astra.accesswidener",
+  "accessWidener": "ad-infinitum.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.8",
     "fabric": "*",
