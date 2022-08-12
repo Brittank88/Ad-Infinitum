@@ -10,9 +10,10 @@ import net.minecraft.item.Items;
 
 import java.lang.reflect.Field;
 
-@SuppressWarnings("unused") public class AdAstraSingularities extends SingularityRegistryContainer {
+public class AdAstraSingularities extends SingularityRegistryContainer {
 
-    SingularityItemRenderer SINGULARITY_ITEM_RENDERER = new SingularityItemRenderer();
+    // DIR used for rendering singularity items.
+    private static final SingularityItemRenderer SINGULARITY_ITEM_RENDERER = new SingularityItemRenderer();
 
     // Basic Resources
     public static final SingularityItem COBBLESTONE_SINGULARITY  = new SingularityItem(new ItemStack(Items.COBBLESTONE    ));

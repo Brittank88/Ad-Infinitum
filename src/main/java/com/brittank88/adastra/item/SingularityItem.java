@@ -11,7 +11,6 @@ import org.apache.commons.lang3.Range;
 import java.util.List;
 import java.util.stream.IntStream;
 
-@SuppressWarnings("unused")
 public class SingularityItem extends AbstractSingularityItem {
 
     public SingularityItem(ItemStack material, OwoItemSettings settings, int tier, SpriteIdentifier baseSpriteID, SpriteIdentifier coreSpriteID, float baseSpriteRotationSpeed, float coreSpriteRotationSpeed) {

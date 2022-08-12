@@ -15,7 +15,6 @@ import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 
-@SuppressWarnings("ClassCanBeRecord")
 public class SingularityItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
 
     @Override public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {

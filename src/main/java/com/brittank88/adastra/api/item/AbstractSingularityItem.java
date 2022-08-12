@@ -22,7 +22,7 @@ import java.util.function.Function;
  *
  * @author brittank88
  */
-@SuppressWarnings("unused")
+
 public abstract class AbstractSingularityItem extends Item implements IHaloRenderItem {
 
     public static final SpriteIdentifier DEFAULT_BASE_SPRITE_ID      = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdAstra.id("textures/item/singularity/base.png"));
