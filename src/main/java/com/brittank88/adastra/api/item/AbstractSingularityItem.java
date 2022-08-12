@@ -1,12 +1,10 @@
 package com.brittank88.adastra.api.item;
 
 import com.brittank88.adastra.AdAstra;
-import com.brittank88.adastra.client.render.item.SingularityItemRenderer;
 import com.brittank88.adastra.group.AdAstraGroups;
 import com.brittank88.adastra.util.ColourUtil;
 import com.brittank88.adastra.util.NumeralUtil;
 import io.wispforest.owo.itemgroup.OwoItemSettings;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -65,8 +63,6 @@ public abstract class AbstractSingularityItem extends Item implements IHaloRende
         this.coreSpriteID = coreSpriteID;
         this.baseSpriteRotationSpeed = baseSpriteRotationSpeed;
         this.coreSpriteRotationSpeed = coreSpriteRotationSpeed;
-
-        BuiltinItemRendererRegistry.INSTANCE.register(this, new SingularityItemRenderer(this));
     }
 
     public AbstractSingularityItem(ItemStack material, OwoItemSettings settings, int tier, SpriteIdentifier baseSpriteID, SpriteIdentifier coreSpriteID) {

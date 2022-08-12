@@ -1,11 +1,18 @@
 package com.brittank88.adastra.item;
 
 import com.brittank88.adastra.AdAstra;
+import com.brittank88.adastra.api.item.AbstractSingularityItem;
 import com.brittank88.adastra.api.registry.SingularityRegistryContainer;
+import com.brittank88.adastra.client.render.item.SingularityItemRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
+import java.lang.reflect.Field;
+
 @SuppressWarnings("unused") public class AdAstraSingularities extends SingularityRegistryContainer {
+
+    SingularityItemRenderer SINGULARITY_ITEM_RENDERER = new SingularityItemRenderer();
 
     // Basic Resources
     public static final SingularityItem COBBLESTONE_SINGULARITY  = new SingularityItem(new ItemStack(Items.COBBLESTONE    ));
@@ -28,4 +35,9 @@ import net.minecraft.item.Items;
     public static final SingularityItem NETHER_STAR_SINGULARITY  = new SingularityItem(new ItemStack(Items.NETHER_STAR    ));
 
     public AdAstraSingularities() { super(AdAstra.MOD_ID); }
+
+    @Override public void processField(AbstractSingularityItem value, String identifier, Field field) {
+        super.processField(value, identifier, field);
+        BuiltinItemRendererRegistry.INSTANCE.register(value, SINGULARITY_ITEM_RENDERER);
+    }
 }
