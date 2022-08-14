@@ -11,8 +11,12 @@ import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SingularityRegistryContainer implements SimpleFieldProcessingSubject<AbstractSingularityItem> {
+
+    public static final List<AbstractSingularityItem> REGISTERED_SINGULARITIES = new ArrayList<>();
 
     public final String namespace;
 
@@ -42,6 +46,9 @@ public class SingularityRegistryContainer implements SimpleFieldProcessingSubjec
 
         // Register singularity model.
         AdInfinitumRRP.RESOURCE_PACK.addModel(JModel.model("minecraft:builtin/entity"), new Identifier(this.namespace, "item/" + sID.getPath()));
+
+        // Add reference to singularities list.
+        REGISTERED_SINGULARITIES.add(value);
 
         // TODO: Finish this.
     }

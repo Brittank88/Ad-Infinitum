@@ -28,8 +28,7 @@ public class AdInfinitumBlocks implements BlockRegistryContainer {
     @AssignedTab(tab = 1) public static final Block CRYSTAL_MATRIX_BLOCK = new CrystalMatrixBlock(FabricBlockSettings.of(Material.METAL).nonOpaque());
     @AssignedTab(tab = 1) public static final Block INFINITY_BLOCK = new InfinityBlock(FabricBlockSettings.of(Material.METAL).nonOpaque());
 
-    @Override
-    public void postProcessField(String namespace, Block value, String identifier, Field field) {
+    @Override public void postProcessField(String namespace, Block value, String identifier, Field field) {
 
         // Register RRP files for the block.
         AdInfinitumRRP.handleBlockRegistryContainer(namespace, value, identifier, field);

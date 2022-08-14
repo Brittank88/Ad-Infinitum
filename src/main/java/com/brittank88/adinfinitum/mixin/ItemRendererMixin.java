@@ -11,6 +11,7 @@
     import net.minecraft.client.util.math.MatrixStack;
     import net.minecraft.item.ItemStack;
     import net.minecraft.util.math.ColorHelper;
+    import net.minecraft.util.math.MathHelper;
     import org.apache.commons.lang3.Range;
     import org.spongepowered.asm.mixin.Mixin;
     import org.spongepowered.asm.mixin.injection.At;
@@ -76,8 +77,8 @@
                 float scale = Range.between(0.8F, 1.2F).fit(hri.getPulseScale(stack));
                 double trans = (1 - scale) / 2;
 
-                matrices.translate(trans, trans, 0);
-                matrices.scale(scale, scale, 1.0001F);
+                matrices.translate(trans, trans, trans + MathHelper.EPSILON);
+                matrices.scale(scale, scale, scale);
             }
         }
     }

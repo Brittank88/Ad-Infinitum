@@ -22,6 +22,8 @@ public class AdInfinitumClient implements ClientModInitializer {
         // Register custom sprites.
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(this::registerSprites);
 
+        // TODO: Migrate all client-side stuff like lang to the client (client entrypoint runs after common entrypoint anyways).
+
         // Register the RRP.
         AdInfinitumRRP.registerPack();
     }

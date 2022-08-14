@@ -19,19 +19,18 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
 
     @Override public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
-        if (stack.getItem() instanceof SingularityItem si) {
+        SingularityItem si = (SingularityItem) stack.getItem();
 
-            // Get the singularity's colour.
-            int colour = si.getColor();
-            float r = ColorHelper.Argb.getRed(colour);
-            float g = ColorHelper.Argb.getGreen(colour);
-            float b = ColorHelper.Argb.getBlue(colour);
-            float a = ColorHelper.Argb.getAlpha(colour);
+        // Get the singularity's colour.
+        int colour = si.getColor();
+        float r = ColorHelper.Argb.getRed(colour);
+        float g = ColorHelper.Argb.getGreen(colour);
+        float b = ColorHelper.Argb.getBlue(colour);
+        float a = ColorHelper.Argb.getAlpha(colour);
 
-            float tickDelta = MinecraftClient.getInstance().getTickDelta();
-            this.renderBase(si, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdInfinitumClient.TICK_COUNT, tickDelta);
-            this.renderCore(si, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdInfinitumClient.TICK_COUNT, tickDelta);
-        }
+        float tickDelta = MinecraftClient.getInstance().getTickDelta();
+        this.renderBase(si, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdInfinitumClient.TICK_COUNT, tickDelta);
+        this.renderCore(si, mode, matrices, vertexConsumers, light, overlay, r, g, b, a, AdInfinitumClient.TICK_COUNT, tickDelta);
     }
 
     private void renderBase(
