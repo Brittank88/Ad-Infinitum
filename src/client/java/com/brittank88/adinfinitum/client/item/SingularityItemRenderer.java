@@ -45,7 +45,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
         matrices.push();
 
         // Rotate matrices.
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.baseRotationSpeed() * (tickCount + tickDelta)) % 360));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.baseRotationSpeed().apply(stack) * (tickCount + tickDelta)) % 360));
 
         // Get current normal and position matrix.
         entry          = matrices.peek();
@@ -53,7 +53,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
         normalMatrix   = entry.getNormalMatrix();
 
         // Draw base sprite.
-        VertexConsumer baseConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.baseSpriteIdentifier().getTextureId()));
+        VertexConsumer baseConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.baseSpriteIdentifier().apply(stack).getTextureId()));
         baseConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         baseConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         baseConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
@@ -66,7 +66,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
 
         // Push and rotate matrices.
         matrices.push();
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.coreRotationSpeed() * (tickCount + tickDelta)) % 360));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.coreRotationSpeed().apply(stack) * (tickCount + tickDelta)) % 360));
 
         // Get current normal and position matrix.
         entry          = matrices.peek();
@@ -74,7 +74,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
         normalMatrix   = entry.getNormalMatrix();
 
         // Draw core sprite.
-        VertexConsumer coreConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.coreSpriteIdentifier().getTextureId()));
+        VertexConsumer coreConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.coreSpriteIdentifier().apply(stack).getTextureId()));
         coreConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         coreConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         coreConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();

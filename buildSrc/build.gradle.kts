@@ -17,6 +17,6 @@ dependencies {
         Properties().apply { load(it) }
     }
 
-    implementation(group = "org.ow2.asm"       , name = "asm-tree"      , version = "latest.release")
-    implementation(group = "net.fabricmc"      , name = "fabric-loader" , version = properties.getProperty("fabricLoaderVersion"))
+    implementation(group = "org.ow2.asm" , name = "asm"           , version = "latest.release"                             )
+    implementation(group = "net.fabricmc", name = "fabric-loader" , version = properties.getProperty("fabricLoaderVersion"))
 }

@@ -6,36 +6,56 @@ import com.brittank88.adinfinitum.util.client.ColourUtil;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.util.function.ToFloatFunction;
 import net.minecraft.util.registry.Registry;
+import org.apache.commons.text.WordUtils;
 
+import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.ToIntFunction;
 
 public record SingularityItemData(
-        SpriteIdentifier         baseSpriteIdentifier,
-        SpriteIdentifier         coreSpriteIdentifier,
-        float                    baseRotationSpeed   ,
-        float                    coreRotationSpeed   ,
-        ToIntFunction<ItemStack> colourFunction
+        Function<ItemStack, String>           displayName         ,
+        Function<ItemStack, SpriteIdentifier> baseSpriteIdentifier,
+        Function<ItemStack, SpriteIdentifier> coreSpriteIdentifier,
+        ToFloatFunction<ItemStack>            baseRotationSpeed   ,
+        ToFloatFunction<ItemStack>            coreRotationSpeed   ,
+        ToIntFunction  <ItemStack>            colourFunction
 ) {
 
-    // TODO: Consider making other data suppliers that support working with an ItemStack.
-
     public static class Builder {
+
+        /**
+         * The display name of the singularity.
+         * <br /><br />
+         * By default, this is determined from the singularity's material's registry ID.
+         */
+        private final Function<ItemStack, String> displayName = stack ->
+                stack.getItem() instanceof SingularityItem si
+                        ? WordUtils.capitalizeFully(
+                                Registry.ITEM.getId(si.getMaterial().getItem())
+                                        .getPath()
+                                        .replaceFirst(" (block|ingot|dust|nugget|ore|rod|powder)", "")
+                        ) + " [MK-" + si.getTierNumeral() + ']'
+                        : "Unknown Singularity";
 
         /**
          * The singularity base {@link SpriteIdentifier}.
          * <br /><br />
          * By default, this is the sprite provided by Ad Infinitum.
          */
-        private SpriteIdentifier baseSpriteIdentifier = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("textures/item/singularity/base.png"));
+        private Function<ItemStack, SpriteIdentifier> baseSpriteIdentifier = stack -> new SpriteIdentifier(
+                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("textures/item/singularity/base.png")
+        );
 
         /**
          * The singularity core {@link SpriteIdentifier}.
          * <br /><br />
          * By default, this is the sprite provided by Ad Infinitum.
          */
-        private SpriteIdentifier coreSpriteIdentifier = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("textures/item/singularity/core.png"));
+        private Function<ItemStack, SpriteIdentifier> coreSpriteIdentifier = stack -> new SpriteIdentifier(
+                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("textures/item/singularity/core.png")
+        );
 
         /**
          * The singularity base rotation speed in degrees/tick - by default, 1.
@@ -44,7 +64,7 @@ public record SingularityItemData(
          * <br />Positive values will rotate the sprite clockwise.
          * <br />A speed of 0 will not rotate the sprite.
          */
-        private float baseRotationSpeed = 1f;
+        private ToFloatFunction<ItemStack> baseRotationSpeed = stack -> 1f;
 
         /**
          * The singularity core rotation speed in degrees/tick - by default, -0.5.
@@ -53,7 +73,7 @@ public record SingularityItemData(
          * <br />Positive values will rotate the sprite clockwise.
          * <br />A speed of 0 will not rotate the sprite.
          */
-        private float coreRotationSpeed = 0.5f;
+        private ToFloatFunction<ItemStack> coreRotationSpeed = stack -> 0.5f;
 
         /**
          * The colour of the singularity as an ARGB integer.
@@ -64,22 +84,22 @@ public record SingularityItemData(
                 ? ColourUtil.extractProminentRGB(new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Registry.ITEM.getId(si.getMaterial().getItem())))
                 : ColourUtil.DEFAULT_COLOUR;
 
-        public Builder setBaseSpriteIdentifier(SpriteIdentifier baseSpriteIdentifier) {
+        public Builder setBaseSpriteIdentifier(Function<ItemStack, SpriteIdentifier> baseSpriteIdentifier) {
             this.baseSpriteIdentifier = baseSpriteIdentifier;
             return this;
         }
 
-        public Builder setCoreSpriteIdentifier(SpriteIdentifier coreSpriteIdentifier) {
+        public Builder setCoreSpriteIdentifier(Function<ItemStack, SpriteIdentifier> coreSpriteIdentifier) {
             this.coreSpriteIdentifier = coreSpriteIdentifier;
             return this;
         }
 
-        public Builder setBaseRotationSpeed(float baseRotationSpeed) {
+        public Builder setBaseRotationSpeed(ToFloatFunction<ItemStack> baseRotationSpeed) {
             this.baseRotationSpeed = baseRotationSpeed;
             return this;
         }
 
-        public Builder setCoreRotationSpeed(float coreRotationSpeed) {
+        public Builder setCoreRotationSpeed(ToFloatFunction<ItemStack> coreRotationSpeed) {
             this.coreRotationSpeed = coreRotationSpeed;
             return this;
         }
@@ -92,7 +112,7 @@ public record SingularityItemData(
         }
 
         public SingularityItemData build() {
-            return new SingularityItemData(baseSpriteIdentifier, coreSpriteIdentifier, baseRotationSpeed, coreRotationSpeed, colourFunction);
+            return new SingularityItemData(displayName, baseSpriteIdentifier, coreSpriteIdentifier, baseRotationSpeed, coreRotationSpeed, colourFunction);
         }
     }
 }

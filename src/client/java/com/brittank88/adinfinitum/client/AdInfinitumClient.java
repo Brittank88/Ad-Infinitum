@@ -1,7 +1,9 @@
 package com.brittank88.adinfinitum.client;
 
 import com.brittank88.adinfinitum.AdInfinitum;
-import com.brittank88.adinfinitum.client.resource.AdInfinitumRRP;
+import com.brittank88.adinfinitum.client.config.AdInfinitumConfig;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
@@ -17,15 +19,16 @@ public class AdInfinitumClient implements ClientModInitializer {
 
     @Override public void onInitializeClient() {
 
+        // Register config.
+        AutoConfig.register(AdInfinitumConfig.class, GsonConfigSerializer::new);
+
+        // Start tracking ticks.
         ClientTickEvents.START_CLIENT_TICK.register(mc -> tickCount++);
 
         // Register custom sprites.
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(this::registerSprites);
 
         // TODO: Migrate all client-side stuff like lang to the client (client entrypoint runs after common entrypoint anyways).
-
-        // Register the RRP.
-        AdInfinitumRRP.registerPack();
     }
 
     private void registerSprites(SpriteAtlasTexture atlasTexture, ClientSpriteRegistryCallback.Registry registry) {

@@ -9,11 +9,7 @@ plugins {
 
 buildscript {
     dependencies {
-        val fabricLoaderVersion     : String by project
-
         classpath(group = "org.apache.commons", name = "commons-text"  , version = "latest.release")
-        classpath(group = "org.ow2.asm"       , name = "asm-tree"      , version = "latest.release")
-        classpath(group = "net.fabricmc"      , name = "fabric-loader" , version = fabricLoaderVersion)
     }
 }
 
@@ -97,8 +93,10 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
 
-    maven("https://maven.wispforest.io")
+    maven("https://maven.wispforest.io/")
     maven("https://storage.googleapis.com/devan-maven/")
+    maven("https://maven.terraformersmc.com/")
+    maven("https://maven.shedaniel.me/")
 }
 
 dependencies {
@@ -107,6 +105,8 @@ dependencies {
     val owoVersion              : String by project
     val arrpVersion             : String by project
     val apacheCommonsTextVersion: String by project
+    val modMenuVersion          : String by project
+    val clothConfigVersion      : String by project
     val colorThiefVersion       : String by project
 
     // To change the versions see the gradle.properties file.
@@ -121,13 +121,20 @@ dependencies {
     modImplementation(group = "io.wispforest", name = "owo-lib"     , version = owoVersion) // Versions tagged with +1.18 onwards.
     include          (group = "io.wispforest", name = "owo-sentinel", version = owoVersion) // Sentinel will warn users without oωo-lib and give the option to download it automatically.
 
-    // ARRP
-    modImplementation(group = "net.devtech", name = "arrp", version = arrpVersion)
-
     // Apache Commons Text
+    // TODO: Remove
     include(implementation(group = "org.apache.commons", name = "commons-text", version = apacheCommonsTextVersion))  // TODO: Stop using this.
 
-    // https://mvnrepository.com/artifact/de.androidpit/color-thief
+    // ModMenu
+    modCompileOnly(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
+    modRuntimeOnly(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
+
+    // Cloth Config
+    modApi(group = "me.shedaniel.cloth", name = "cloth-config-fabric", version = clothConfigVersion) {
+        exclude(group = "net.fabricmc.fabric-api")
+    }
+
+    // Color-Thief (https://mvnrepository.com/artifact/de.androidpit/color-thief)
     include(utilClient.implementationConfigurationName(group = "de.androidpit", name = "color-thief", version = colorThiefVersion))
 }
 

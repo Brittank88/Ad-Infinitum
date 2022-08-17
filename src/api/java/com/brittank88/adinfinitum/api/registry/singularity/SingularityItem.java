@@ -51,9 +51,9 @@ public abstract class SingularityItem extends Item {
      * Returns the tier of the singularity, expressed as capitalised Roman numerals.
      *
      * @return The tier of the singularity, expressed as capitalised Roman numerals.
-     * @see NumeralUtil.RomanNumeral#toRoman(int)
+     * @see NumeralUtil#toRomanNumeral(int, boolean)
      */
-    public String getTierNumeral() { return NumeralUtil.RomanNumeral.toRoman(this.tier); }
+    public String getTierNumeral() { return NumeralUtil.toRomanNumeral(this.tier, true); }
 
     /**
      * A version of {@link SingularityItem#getTierNumeral()} that takes a {@link Function postProcessor} to transform the resulting Roman numerals.

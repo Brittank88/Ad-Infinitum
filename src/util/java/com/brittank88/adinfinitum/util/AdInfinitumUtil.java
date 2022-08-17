@@ -4,7 +4,9 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class AdInfinitumUtil {
+public class AdInfinitumUtil {
+
+    private AdInfinitumUtil() throws IllegalAccessException { throw new IllegalAccessException("Class should not be instantiated!"); }
 
     public static final Logger LOGGER = LogManager.getLogger();
 

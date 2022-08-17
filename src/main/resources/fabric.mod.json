@@ -22,6 +22,9 @@
     ],
     "fabric-datagen": [
       "com.brittank88.adinfinitum.data.AdInfinitumDatagen"
+    ],
+    "modmenu": [
+      "com.brittank88.adinfinitum.client.integration.ModMenuIntegration"
     ]
   },
   "mixins": [

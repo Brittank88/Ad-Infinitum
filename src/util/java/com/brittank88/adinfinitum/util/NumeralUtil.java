@@ -1,36 +1,35 @@
 package com.brittank88.adinfinitum.util;
 
-import java.util.TreeMap;
+import org.jetbrains.annotations.Contract;
 
 public abstract class NumeralUtil {
 
     /**
-     * Returns the Roman numeral representation of the given number.
+     * Returns the roman numeral representation of a given number, either in lowercase or uppercase.
      * <br /><br />
-     * Credits to <a href="https://stackoverflow.com/a/19759564">this Stack Overflow post</a>.
+     * <i>Credits to <a href="https://stackoverflow.com/a/12646864">André Kramer Orten</a> for the original algorithm,
+     * which considers this as a unary problem rather than a number problem.</i>
+     *
+     * @param number The number to convert to a roman numerals.
+     * @param capitalised Whether to return the roman numeral in capitalised form.
+     * @return The roman numerals representation of the number.
      */
-    public abstract static class RomanNumeral {
-        private final static TreeMap<Integer, String> NUMERAL_MAP = new TreeMap<Integer, String>();
-
-        static {
-            NUMERAL_MAP.put(1000, "M");
-            NUMERAL_MAP.put(900, "CM");
-            NUMERAL_MAP.put(500, "D");
-            NUMERAL_MAP.put(400, "CD");
-            NUMERAL_MAP.put(100, "C");
-            NUMERAL_MAP.put(90, "XC");
-            NUMERAL_MAP.put(50, "L");
-            NUMERAL_MAP.put(40, "XL");
-            NUMERAL_MAP.put(10, "X");
-            NUMERAL_MAP.put(9, "IX");
-            NUMERAL_MAP.put(5, "V");
-            NUMERAL_MAP.put(4, "IV");
-            NUMERAL_MAP.put(1, "I");
-        }
-
-        public static String toRoman(int number) {
-            int l = NUMERAL_MAP.floorKey(number);
-            return number == l ? NUMERAL_MAP.get(number) : NUMERAL_MAP.get(l) + toRoman(number-l);
-        }
+    @Contract(pure = true)
+    @SuppressWarnings("SpellCheckingInspection")
+    public static String toRomanNumeral(int number, boolean capitalised) {
+        String romanNumeralsUpper = "I".repeat(number)
+                .replace("IIIII", "V" )
+                .replace("IIII" , "IV")
+                .replace("VV"   , "X" )
+                .replace("VIV"  , "IX")
+                .replace("XXXXX", "L" )
+                .replace("XXXX" , "XL")
+                .replace("LL"   , "C" )
+                .replace("LXL"  , "XC")
+                .replace("CCCCC", "D" )
+                .replace("CCCC" , "CD")
+                .replace("DD"   , "M" )
+                .replace("DCD"  , "CM");
+        return capitalised ? romanNumeralsUpper : romanNumeralsUpper.toLowerCase();
     }
 }
