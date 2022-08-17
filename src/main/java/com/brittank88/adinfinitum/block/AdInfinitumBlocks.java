@@ -48,5 +48,5 @@ public final class AdInfinitumBlocks implements BlockRegistryContainer {
         // AdInfinitumRRP.handleItemRegistryContainer(namespace, blockItem, identifier, field);
     }
 
-    @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtil.getRegisteredAmount(net.minecraft.util.registry.Registry.BLOCK) + " blocks!"); }
+    @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtil.getRegisteredAmount(net.minecraft.util.registry.Registry.BLOCK, AdInfinitum.MOD_ID) + " blocks!"); }
 }

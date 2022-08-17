@@ -1,8 +1,8 @@
 package com.brittank88.adinfinitum.group;
 
+import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.AdInfinitumAPI;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
-import com.brittank88.adinfinitum.util.AdInfinitumUtil;
 import com.brittank88.adinfinitum.util.NumeralUtil;
 import io.wispforest.owo.itemgroup.Icon;
 import io.wispforest.owo.itemgroup.OwoItemGroup;
@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 
 public final class AdInfinitumGroups {
 
-    public static final OwoItemGroup GROUP_MAIN = new OwoItemGroup(AdInfinitumUtil.id("group.main")) {
+    public static final OwoItemGroup GROUP_MAIN = new OwoItemGroup(AdInfinitum.id("group.main")) {
         @Override public ItemStack createIcon() { return new ItemStack(Items.IRON_INGOT); }
 
         @Override protected void setup() {
@@ -23,15 +23,15 @@ public final class AdInfinitumGroups {
             displaySingleTab(); // Display item tabs even if only one exists.
 
             // Add all tabs.
-            addTab(Icon.of(Items.DEBUG_STICK), "Machines", TagKey.of(Registry.ITEM_KEY, AdInfinitumUtil.id("machines")));
-            addTab(Icon.of(Items.DEBUG_STICK), "Blocks"  , TagKey.of(Registry.ITEM_KEY, AdInfinitumUtil.id("blocks"  )));
-            addTab(Icon.of(Items.DEBUG_STICK), "Tools"   , TagKey.of(Registry.ITEM_KEY, AdInfinitumUtil.id("tools"   )));
-            addTab(Icon.of(Items.DEBUG_STICK), "Armour"  , TagKey.of(Registry.ITEM_KEY, AdInfinitumUtil.id("armour"  )));
+            addTab(Icon.of(Items.DEBUG_STICK), "Machines", TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("machines")));
+            addTab(Icon.of(Items.DEBUG_STICK), "Blocks"  , TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("blocks"  )));
+            addTab(Icon.of(Items.DEBUG_STICK), "Tools"   , TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("tools"   )));
+            addTab(Icon.of(Items.DEBUG_STICK), "Armour"  , TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("armour"  )));
         }
     };
 
-    public static final OwoItemGroup GROUP_SINGULARITIES = new OwoItemGroup(AdInfinitumUtil.id("group.singularities")) {
-        @Override public ItemStack createIcon() { return new ItemStack(Registry.ITEM.get(AdInfinitumUtil.id("cobblestone_singularity_mk-i"))); }
+    public static final OwoItemGroup GROUP_SINGULARITIES = new OwoItemGroup(AdInfinitum.id("group.singularities")) {
+        @Override public ItemStack createIcon() { return new ItemStack(Registry.ITEM.get(AdInfinitum.id("cobblestone_singularity_mk-i"))); }
 
         @Override protected void setup() {
             keepStaticTitle();  // The title will not change depending on the selected tab.
@@ -42,7 +42,7 @@ public final class AdInfinitumGroups {
                     .forEach(i -> addTab(
                             Icon.of(Items.DEBUG_STICK),
                             "MK-" + NumeralUtil.toRomanNumeral(i, true),
-                            TagKey.of(Registry.ITEM_KEY, AdInfinitumUtil.id("singularity_mk-" + NumeralUtil.toRomanNumeral(i, false)))
+                            TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("singularity_mk-" + NumeralUtil.toRomanNumeral(i, false)))
                     ));
         }
     };

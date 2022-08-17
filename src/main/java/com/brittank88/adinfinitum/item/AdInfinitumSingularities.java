@@ -1,7 +1,7 @@
 package com.brittank88.adinfinitum.item;
 
+import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.registry.singularity.AbstractSingularityItemProcessingSubject;
-import com.brittank88.adinfinitum.util.AdInfinitumUtil;
 
 public final class AdInfinitumSingularities extends AbstractSingularityItemProcessingSubject {
 
@@ -27,5 +27,5 @@ public final class AdInfinitumSingularities extends AbstractSingularityItemProce
     public static final SingularityItem NETHER_STAR_SINGULARITY  = new SingularityItem(new ItemStack(Items.NETHER_STAR    ));
     */
 
-    public AdInfinitumSingularities() { super(AdInfinitumUtil.MOD_ID); }
+    public AdInfinitumSingularities() { super(AdInfinitum.MOD_ID); }
 }

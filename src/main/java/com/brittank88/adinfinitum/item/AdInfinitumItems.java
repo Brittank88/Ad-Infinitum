@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 
 public final class AdInfinitumItems implements ItemRegistryContainer {
 
-    @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtil.getRegisteredAmount(net.minecraft.util.registry.Registry.ITEM) + " items!"); }
+    @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtil.getRegisteredAmount(net.minecraft.util.registry.Registry.ITEM, AdInfinitum.MOD_ID) + " items!"); }
 
     @Override public void postProcessField(String namespace, Item value, String identifier, Field field) {
 

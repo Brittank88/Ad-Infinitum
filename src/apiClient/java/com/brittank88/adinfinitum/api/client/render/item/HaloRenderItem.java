@@ -1,6 +1,6 @@
 package com.brittank88.adinfinitum.api.client.render.item;
 
-import com.brittank88.adinfinitum.util.AdInfinitumUtil;
+import com.brittank88.adinfinitum.AdInfinitum;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
@@ -33,7 +33,7 @@ public interface HaloRenderItem {
      * @return The halo sprite identifier.
      */
     default SpriteIdentifier getHaloSprite(ItemStack stack) {
-        return new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("item/render/halo"));
+        return new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("item/render/halo"));
     };
 
     /**
@@ -44,7 +44,7 @@ public interface HaloRenderItem {
      * @param stack The item stack to get the halo noise sprite for.
      * @return The halo noise sprite identifier.
      */
-    default SpriteIdentifier getHaloNoiseSprite(ItemStack stack) { return new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("item/render/halo_noise")); }
+    default SpriteIdentifier getHaloNoiseSprite(ItemStack stack) { return new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("item/render/halo_noise")); }
 
     /**
      * The halo colour.

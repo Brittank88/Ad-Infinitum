@@ -11,18 +11,6 @@ import org.jetbrains.annotations.NotNull;
 public abstract class RegistryUtil {
 
     /**
-     * Returns the amount of entries registered with the given {@link net.minecraft.util.registry.Registry} by this mod.
-     *
-     * @param registry The registry to check.
-     * @return The amount of entries registered with the given {@link net.minecraft.util.registry.Registry} by this mod.
-     * 
-     * @see #getRegisteredAmount(net.minecraft.util.registry.Registry, String)
-     */
-    public static long getRegisteredAmount(@NotNull net.minecraft.util.registry.Registry<?> registry) {
-        return getRegisteredAmount(registry, AdInfinitumUtil.MOD_ID);
-    }
-
-    /**
      * Returns the amount of entries registered with the given {@link net.minecraft.util.registry.Registry} under the given {@link String namespace}.
      *
      * @param registry The registry to check.

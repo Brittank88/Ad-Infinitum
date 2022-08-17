@@ -1,7 +1,7 @@
 package com.brittank88.adinfinitum.api.client.render.item;
 
+import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
-import com.brittank88.adinfinitum.util.AdInfinitumUtil;
 import com.brittank88.adinfinitum.util.client.ColourUtil;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
@@ -45,7 +45,7 @@ public record SingularityItemData(
          * By default, this is the sprite provided by Ad Infinitum.
          */
         private Function<ItemStack, SpriteIdentifier> baseSpriteIdentifier = stack -> new SpriteIdentifier(
-                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("textures/item/singularity/base.png")
+                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("textures/item/singularity/base.png")
         );
 
         /**
@@ -54,7 +54,7 @@ public record SingularityItemData(
          * By default, this is the sprite provided by Ad Infinitum.
          */
         private Function<ItemStack, SpriteIdentifier> coreSpriteIdentifier = stack -> new SpriteIdentifier(
-                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitumUtil.id("textures/item/singularity/core.png")
+                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("textures/item/singularity/core.png")
         );
 
         /**
