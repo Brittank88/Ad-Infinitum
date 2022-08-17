@@ -1,14 +1,12 @@
 package com.brittank88.adinfinitum.block;
 
 import com.brittank88.adinfinitum.AdInfinitum;
-import com.brittank88.adinfinitum.annotation.AssignedTab;
-import com.brittank88.adinfinitum.api.item.IHaloRenderItem;
+import com.brittank88.adinfinitum.group.AdInfinitumGroups;
+import com.brittank88.adinfinitum.api.registry.annotation.AssignedTab;
 import com.brittank88.adinfinitum.block.custom.CrystalMatrixBlock;
 import com.brittank88.adinfinitum.block.custom.InfinityBlock;
 import com.brittank88.adinfinitum.block.custom.NeutronCollectorBlock;
 import com.brittank88.adinfinitum.block.custom.NeutroniumBlock;
-import com.brittank88.adinfinitum.client.resource.AdInfinitumRRP;
-import com.brittank88.adinfinitum.group.AdInfinitumGroups;
 import com.brittank88.adinfinitum.util.RegistryUtil;
 import io.wispforest.owo.itemgroup.OwoItemSettings;
 import io.wispforest.owo.registration.reflect.BlockRegistryContainer;
@@ -20,7 +18,7 @@ import net.minecraft.util.Identifier;
 
 import java.lang.reflect.Field;
 
-public class AdInfinitumBlocks implements BlockRegistryContainer {
+public final class AdInfinitumBlocks implements BlockRegistryContainer {
 
     @AssignedTab public static final Block NEUTRON_COLLECTOR = new NeutronCollectorBlock(FabricBlockSettings.of(Material.METAL).nonOpaque());
 
@@ -31,7 +29,8 @@ public class AdInfinitumBlocks implements BlockRegistryContainer {
     @Override public void postProcessField(String namespace, Block value, String identifier, Field field) {
 
         // Register RRP files for the block.
-        AdInfinitumRRP.handleBlockRegistryContainer(namespace, value, identifier, field);
+        // TODO: heck
+        //AdInfinitumRRP.handleBlockRegistryContainer(namespace, value, identifier, field);
 
         // Preserve normal traversal behaviour.
         if (field.isAnnotationPresent(NoBlockItem.class)) return;
@@ -44,14 +43,10 @@ public class AdInfinitumBlocks implements BlockRegistryContainer {
         settings.group(AdInfinitumGroups.GROUP_MAIN).tab(tabAnnotation == null ? AssignedTab.DEFAULT_TAB_INDEX : tabAnnotation.tab());
 
         // Register the block item.
-        BlockItem blockItem = value instanceof IHaloRenderItem ? new BlockItemHalo(value, settings) : new BlockItem(value, settings);
+        BlockItem blockItem = new BlockItem(value, settings);
         net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.ITEM, new Identifier(namespace, identifier), blockItem);
-        AdInfinitumRRP.handleItemRegistryContainer(namespace, blockItem, identifier, field);
+        // AdInfinitumRRP.handleItemRegistryContainer(namespace, blockItem, identifier, field);
     }
 
     @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtil.getRegisteredAmount(net.minecraft.util.registry.Registry.BLOCK) + " blocks!"); }
-
-    private static class BlockItemHalo extends BlockItem implements IHaloRenderItem {
-        public BlockItemHalo(Block block, Settings settings) { super(block, settings); }
-    }
 }

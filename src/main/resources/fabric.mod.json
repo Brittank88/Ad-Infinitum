@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "ad-infinitum",
+  "id": "${id}",
   "version": "${version}",
-  "name": "Ad Infinitum",
+  "name": "${name}",
   "description": "A reimagining of Avaritia, for Fabric!",
   "authors": [
     "Brittank88"
@@ -19,6 +19,9 @@
     ],
     "main": [
       "com.brittank88.adinfinitum.AdInfinitum"
+    ],
+    "fabric-datagen": [
+      "com.brittank88.adinfinitum.data.AdInfinitumDatagen"
     ]
   },
   "mixins": [
@@ -26,8 +29,8 @@
   ],
   "accessWidener": "ad-infinitum.accesswidener",
   "depends": {
-    "fabricloader": ">=0.14.8",
-    "fabric": "*",
-    "minecraft": "1.18.2"
+    "fabricloader": "${fabricLoaderVersion}",
+    "fabric": "${fabricVersion}",
+    "minecraft": "${minecraftVersion}"
   }
 }

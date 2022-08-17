@@ -1,20 +1,11 @@
 package com.brittank88.adinfinitum.item;
 
-import com.brittank88.adinfinitum.AdInfinitum;
-import com.brittank88.adinfinitum.api.item.AbstractSingularityItem;
-import com.brittank88.adinfinitum.api.registry.SingularityRegistryContainer;
-import com.brittank88.adinfinitum.client.render.item.SingularityItemRenderer;
-import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import com.brittank88.adinfinitum.api.registry.singularity.AbstractSingularityItemProcessingSubject;
+import com.brittank88.adinfinitum.util.AdInfinitumUtil;
 
-import java.lang.reflect.Field;
+public final class AdInfinitumSingularities extends AbstractSingularityItemProcessingSubject {
 
-public class AdInfinitumSingularities extends SingularityRegistryContainer {
-
-    // DIR used for rendering singularity items.
-    private static final SingularityItemRenderer SINGULARITY_ITEM_RENDERER = new SingularityItemRenderer();
-
+    /*
     // Basic Resources
     public static final SingularityItem COBBLESTONE_SINGULARITY  = new SingularityItem(new ItemStack(Items.COBBLESTONE    ));
     public static final SingularityItem COAL_SINGULARITY         = new SingularityItem(new ItemStack(Items.COAL_BLOCK     ));
@@ -34,11 +25,7 @@ public class AdInfinitumSingularities extends SingularityRegistryContainer {
 
     // Special
     public static final SingularityItem NETHER_STAR_SINGULARITY  = new SingularityItem(new ItemStack(Items.NETHER_STAR    ));
+    */
 
-    public AdInfinitumSingularities() { super(AdInfinitum.MOD_ID); }
-
-    @Override public void processField(AbstractSingularityItem value, String identifier, Field field) {
-        super.processField(value, identifier, field);
-        BuiltinItemRendererRegistry.INSTANCE.register(value, SINGULARITY_ITEM_RENDERER);
-    }
+    public AdInfinitumSingularities() { super(AdInfinitumUtil.MOD_ID); }
 }

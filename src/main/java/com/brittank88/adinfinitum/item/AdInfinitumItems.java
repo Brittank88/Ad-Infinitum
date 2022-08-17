@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 
 import java.lang.reflect.Field;
 
-public class AdInfinitumItems implements ItemRegistryContainer {
+public final class AdInfinitumItems implements ItemRegistryContainer {
 
     @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtil.getRegisteredAmount(net.minecraft.util.registry.Registry.ITEM) + " items!"); }
 

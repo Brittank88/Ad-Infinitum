@@ -1,19 +1,17 @@
 package com.brittank88.adinfinitum;
 
-import com.brittank88.adinfinitum.block.AdInfinitumBlocks;
-import com.brittank88.adinfinitum.client.resource.AdInfinitumRRP;
 import com.brittank88.adinfinitum.group.AdInfinitumGroups;
+import com.brittank88.adinfinitum.block.AdInfinitumBlocks;
 import com.brittank88.adinfinitum.item.AdInfinitumItems;
 import com.brittank88.adinfinitum.item.AdInfinitumSingularities;
+import com.brittank88.adinfinitum.util.AdInfinitumUtil;
 import io.wispforest.owo.registration.reflect.FieldRegistrationHandler;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class AdInfinitum implements ModInitializer {
+public final class AdInfinitum extends AdInfinitumUtil implements ModInitializer {
 
-    public static final String MOD_ID = "ad-infinitum";
     public static final Logger LOGGER = LogManager.getLogger();
 
     @Override
@@ -23,16 +21,10 @@ public class AdInfinitum implements ModInitializer {
         AdInfinitumGroups.register();
 
         // Register blocks.
-        FieldRegistrationHandler.register(AdInfinitumBlocks.class, MOD_ID, false);
+        FieldRegistrationHandler.register(AdInfinitumBlocks.class, AdInfinitumUtil.MOD_ID, false);
 
         // Register items.
-        FieldRegistrationHandler.register(AdInfinitumItems.class, MOD_ID, false);       // Normal items.
+        FieldRegistrationHandler.register(AdInfinitumItems.class, AdInfinitumUtil.MOD_ID, false);       // Normal items.
         FieldRegistrationHandler.processSimple(AdInfinitumSingularities.class, false);  // Singularities.
-
-        AdInfinitumRRP.RESOURCE_PACK.dump();
-    }
-
-    public static Identifier id(String id) {
-        return new Identifier(MOD_ID, id);
     }
 }
