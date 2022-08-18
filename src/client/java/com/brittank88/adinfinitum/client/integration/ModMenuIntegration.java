@@ -12,6 +12,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
  */
 public class ModMenuIntegration implements ModMenuApi {
     @Override public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return screen -> AdInfinitumClient.CONFIG.gui();
+        return screen -> AdInfinitumClient.COMMON_CONFIG.gui();
     }
 }

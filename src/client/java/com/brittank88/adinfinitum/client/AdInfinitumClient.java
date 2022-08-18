@@ -1,7 +1,7 @@
 package com.brittank88.adinfinitum.client;
 
 import com.brittank88.adinfinitum.AdInfinitum;
-import com.brittank88.adinfinitum.client.config.AdInfinitumConfig;
+import com.brittank88.adinfinitum.client.config.AdInfinitumCommonConfig;
 import gg.essential.elementa.effects.StencilEffect;
 import gg.essential.vigilance.Vigilance;
 import gg.essential.vigilance.Vigilant;
@@ -19,7 +19,7 @@ import net.minecraft.screen.PlayerScreenHandler;
 public class AdInfinitumClient implements ClientModInitializer {
 
     /** The main config of the mod. */
-    public static final Vigilant CONFIG = new AdInfinitumConfig();
+    public static final Vigilant COMMON_CONFIG = AdInfinitumCommonConfig.INSTANCE;
 
     /** A variable tracking the count of current ticks. */
     private static float tickCount = 0;
@@ -32,7 +32,7 @@ public class AdInfinitumClient implements ClientModInitializer {
 
         // Register config.
         Vigilance.initialize();
-        CONFIG.preload();
+        COMMON_CONFIG.preload();
         StencilEffect.enableStencil();
 
         // Start tracking ticks.

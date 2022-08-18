@@ -5,6 +5,7 @@ plugins {
     id("fabric-loom"  ).version("0.12-SNAPSHOT")
     id("maven-publish")
     java
+    kotlin("jvm").version("1.7.10") // TODO: Is this duplicated with what is in buildSrc?
 }
 
 buildscript {
