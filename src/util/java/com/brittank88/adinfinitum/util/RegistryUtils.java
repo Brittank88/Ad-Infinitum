@@ -1,6 +1,5 @@
 package com.brittank88.adinfinitum.util;
 
-import org.apache.commons.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -8,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author brittank88
  */
-public abstract class RegistryUtil {
+public abstract class RegistryUtils {
 
     /**
      * Returns the amount of entries registered with the given {@link net.minecraft.util.registry.Registry} under the given {@link String namespace}.

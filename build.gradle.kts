@@ -96,17 +96,16 @@ repositories {
     maven("https://maven.wispforest.io/")
     maven("https://storage.googleapis.com/devan-maven/")
     maven("https://maven.terraformersmc.com/")
-    maven("https://maven.shedaniel.me/")
+    maven("https://repo.essential.gg/repository/maven-public")
 }
 
 dependencies {
 
     val yarnMappingsVersion     : String by project
     val owoVersion              : String by project
-    val arrpVersion             : String by project
-    val apacheCommonsTextVersion: String by project
     val modMenuVersion          : String by project
-    val clothConfigVersion      : String by project
+    val vigilanceMCVersion      : String by project
+    val vigilanceVersion        : String by project
     val colorThiefVersion       : String by project
 
     // To change the versions see the gradle.properties file.
@@ -114,25 +113,19 @@ dependencies {
     mappings         (group = "net.fabricmc", name = "yarn"         , version = yarnMappingsVersion)
     modImplementation(group = "net.fabricmc", name = "fabric-loader", version = fabricLoaderVersion)
 
-    // FAPI.
+    // FAPI (https://github.com/FabricMC/fabric)
     modImplementation(group = "net.fabricmc.fabric-api", name = "fabric-api", version = fabricAPIVersion)
 
-    // oωo-lib
+    // oωo-lib (https://github.com/wisp-forest/owo-lib)
     modImplementation(group = "io.wispforest", name = "owo-lib"     , version = owoVersion) // Versions tagged with +1.18 onwards.
     include          (group = "io.wispforest", name = "owo-sentinel", version = owoVersion) // Sentinel will warn users without oωo-lib and give the option to download it automatically.
 
-    // Apache Commons Text
-    // TODO: Remove
-    include(implementation(group = "org.apache.commons", name = "commons-text", version = apacheCommonsTextVersion))  // TODO: Stop using this.
-
-    // ModMenu
+    // ModMenu (https://github.com/TerraformersMC/ModMenu)
     modCompileOnly(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
     modRuntimeOnly(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
 
-    // Cloth Config
-    modApi(group = "me.shedaniel.cloth", name = "cloth-config-fabric", version = clothConfigVersion) {
-        exclude(group = "net.fabricmc.fabric-api")
-    }
+    // Vigilance (https://github.com/EssentialGG/Vigilance)
+    modImplementation(include(group = "gg.essential", name = "vigilance-$vigilanceMCVersion-fabric", version = vigilanceVersion))
 
     // Color-Thief (https://mvnrepository.com/artifact/de.androidpit/color-thief)
     include(utilClient.implementationConfigurationName(group = "de.androidpit", name = "color-thief", version = colorThiefVersion))

@@ -3,7 +3,7 @@ package com.brittank88.adinfinitum.group;
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.AdInfinitumAPI;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
-import com.brittank88.adinfinitum.util.NumeralUtil;
+import com.brittank88.adinfinitum.util.NumeralUtils;
 import io.wispforest.owo.itemgroup.Icon;
 import io.wispforest.owo.itemgroup.OwoItemGroup;
 import net.minecraft.item.ItemStack;
@@ -41,8 +41,8 @@ public final class AdInfinitumGroups {
             IntStream.range(1, SingularityItem.DEFAULT_MAXIMUM_TIER + 1)
                     .forEach(i -> addTab(
                             Icon.of(Items.DEBUG_STICK),
-                            "MK-" + NumeralUtil.toRomanNumeral(i, true),
-                            TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("singularity_mk-" + NumeralUtil.toRomanNumeral(i, false)))
+                            "MK-" + NumeralUtils.toRomanNumeral(i, true),
+                            TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("singularity_mk-" + NumeralUtils.toRomanNumeral(i, false)))
                     ));
         }
     };

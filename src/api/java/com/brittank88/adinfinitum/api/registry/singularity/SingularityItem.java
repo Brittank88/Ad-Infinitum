@@ -1,6 +1,6 @@
 package com.brittank88.adinfinitum.api.registry.singularity;
 
-import com.brittank88.adinfinitum.util.NumeralUtil;
+import com.brittank88.adinfinitum.util.NumeralUtils;
 import io.wispforest.owo.itemgroup.OwoItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -51,9 +51,9 @@ public abstract class SingularityItem extends Item {
      * Returns the tier of the singularity, expressed as capitalised Roman numerals.
      *
      * @return The tier of the singularity, expressed as capitalised Roman numerals.
-     * @see NumeralUtil#toRomanNumeral(int, boolean)
+     * @see NumeralUtils#toRomanNumeral(int, boolean)
      */
-    public String getTierNumeral() { return NumeralUtil.toRomanNumeral(this.tier, true); }
+    public String getTierNumeral() { return NumeralUtils.toRomanNumeral(this.tier, true); }
 
     /**
      * A version of {@link SingularityItem#getTierNumeral()} that takes a {@link Function postProcessor} to transform the resulting Roman numerals.

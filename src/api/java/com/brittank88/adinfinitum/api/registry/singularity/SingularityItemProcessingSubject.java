@@ -15,12 +15,12 @@ import java.lang.reflect.Field;
  * @see io.wispforest.owo.registration.reflect.SimpleFieldProcessingSubject SimpleFieldProcessingSubject
  * @see SingularityItem AbstractSingularityItem
  */
-public abstract class AbstractSingularityItemProcessingSubject implements SimpleFieldProcessingSubject<SingularityItem> {
+public abstract class SingularityItemProcessingSubject implements SimpleFieldProcessingSubject<SingularityItem> {
 
     // TODO: Migrate to usage of the @Identifier annotation.
     public final String namespace;
 
-    public AbstractSingularityItemProcessingSubject(@NotNull String namespace) { this.namespace = namespace; }
+    public SingularityItemProcessingSubject(@NotNull String namespace) { this.namespace = namespace; }
 
     @Override public void processField(SingularityItem value, String identifier, Field field) {
         processSingularity(value, identifier, field);                                           // Process MK-I singularity.

@@ -1,4 +1,4 @@
-package com.brittank88.adinfinitum.data.provider.lang;
+package com.brittank88.adinfinitum.data.provider.lang.bases;
 
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.google.gson.Gson;

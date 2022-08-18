@@ -1,9 +1,8 @@
 package com.brittank88.adinfinitum.client.integration;
 
-import com.brittank88.adinfinitum.client.config.AdInfinitumConfig;
+import com.brittank88.adinfinitum.client.AdInfinitumClient;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.shedaniel.autoconfig.AutoConfig;
 
 /**
  * Integration to allow navigation to the mod's config screen through ModMenu's config button.
@@ -13,6 +12,6 @@ import me.shedaniel.autoconfig.AutoConfig;
  */
 public class ModMenuIntegration implements ModMenuApi {
     @Override public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return screen -> AutoConfig.getConfigScreen(AdInfinitumConfig.class, screen).get();
+        return screen -> AdInfinitumClient.CONFIG.gui();
     }
 }

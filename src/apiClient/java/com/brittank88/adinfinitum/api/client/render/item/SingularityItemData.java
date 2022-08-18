@@ -2,13 +2,13 @@ package com.brittank88.adinfinitum.api.client.render.item;
 
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
+import com.brittank88.adinfinitum.util.WordUtils;
 import com.brittank88.adinfinitum.util.client.ColourUtil;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.function.ToFloatFunction;
 import net.minecraft.util.registry.Registry;
-import org.apache.commons.text.WordUtils;
 
 import java.util.function.Function;
 import java.util.function.IntSupplier;

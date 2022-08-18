@@ -2,8 +2,9 @@ package com.brittank88.adinfinitum.client;
 
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.client.config.AdInfinitumConfig;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import gg.essential.elementa.effects.StencilEffect;
+import gg.essential.vigilance.Vigilance;
+import gg.essential.vigilance.Vigilant;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
@@ -11,6 +12,8 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.screen.PlayerScreenHandler;
 
 public class AdInfinitumClient implements ClientModInitializer {
+
+    public static final Vigilant CONFIG = new AdInfinitumConfig();
 
     private static float tickCount = 0;
 
@@ -20,7 +23,9 @@ public class AdInfinitumClient implements ClientModInitializer {
     @Override public void onInitializeClient() {
 
         // Register config.
-        AutoConfig.register(AdInfinitumConfig.class, GsonConfigSerializer::new);
+        Vigilance.initialize();
+        CONFIG.preload();
+        StencilEffect.enableStencil();
 
         // Start tracking ticks.
         ClientTickEvents.START_CLIENT_TICK.register(mc -> tickCount++);

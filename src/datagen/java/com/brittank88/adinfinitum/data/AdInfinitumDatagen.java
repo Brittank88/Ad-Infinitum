@@ -1,7 +1,7 @@
 package com.brittank88.adinfinitum.data;
 
 import com.brittank88.adinfinitum.data.provider.advancement.AdInfinitumAdvancementProvider;
-import com.brittank88.adinfinitum.data.provider.lang.AdInfinitumLanguageProvider;
+import com.brittank88.adinfinitum.data.provider.lang.bases.BaseLanguageProvider;
 import com.brittank88.adinfinitum.data.provider.loottable.AdInfinitumBlockLootTableProvider;
 import com.brittank88.adinfinitum.data.provider.model.AdInfinitumModelProvider;
 import com.brittank88.adinfinitum.data.provider.recipe.AdInfinitumRecipeProvider;
@@ -22,7 +22,7 @@ public class AdInfinitumDatagen implements DataGeneratorEntrypoint {
 
     @Override public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         fabricDataGenerator.addProvider(AdInfinitumAdvancementProvider   ::new);
-        fabricDataGenerator.addProvider(AdInfinitumLanguageProvider      ::new);
+        fabricDataGenerator.addProvider(BaseLanguageProvider             ::new);
         fabricDataGenerator.addProvider(AdInfinitumBlockLootTableProvider::new);
         fabricDataGenerator.addProvider(AdInfinitumModelProvider         ::new);
         fabricDataGenerator.addProvider(AdInfinitumRecipeProvider        ::new);

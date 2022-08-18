@@ -1,9 +1,9 @@
 package com.brittank88.adinfinitum.item;
 
 import com.brittank88.adinfinitum.AdInfinitum;
-import com.brittank88.adinfinitum.api.registry.singularity.AbstractSingularityItemProcessingSubject;
+import com.brittank88.adinfinitum.api.registry.singularity.SingularityItemProcessingSubject;
 
-public final class AdInfinitumSingularities extends AbstractSingularityItemProcessingSubject {
+public final class AdInfinitumSingularities extends SingularityItemProcessingSubject {
 
     /*
     // Basic Resources

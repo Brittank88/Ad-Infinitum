@@ -7,7 +7,7 @@ import com.brittank88.adinfinitum.block.custom.CrystalMatrixBlock;
 import com.brittank88.adinfinitum.block.custom.InfinityBlock;
 import com.brittank88.adinfinitum.block.custom.NeutronCollectorBlock;
 import com.brittank88.adinfinitum.block.custom.NeutroniumBlock;
-import com.brittank88.adinfinitum.util.RegistryUtil;
+import com.brittank88.adinfinitum.util.RegistryUtils;
 import io.wispforest.owo.itemgroup.OwoItemSettings;
 import io.wispforest.owo.registration.reflect.BlockRegistryContainer;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -45,8 +45,7 @@ public final class AdInfinitumBlocks implements BlockRegistryContainer {
         // Register the block item.
         BlockItem blockItem = new BlockItem(value, settings);
         net.minecraft.util.registry.Registry.register(net.minecraft.util.registry.Registry.ITEM, new Identifier(namespace, identifier), blockItem);
-        // AdInfinitumRRP.handleItemRegistryContainer(namespace, blockItem, identifier, field);
     }
 
-    @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtil.getRegisteredAmount(net.minecraft.util.registry.Registry.BLOCK, AdInfinitum.MOD_ID) + " blocks!"); }
+    @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtils.getRegisteredAmount(net.minecraft.util.registry.Registry.BLOCK, AdInfinitum.MOD_ID) + " blocks!"); }
 }

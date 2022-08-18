@@ -2,7 +2,7 @@ package com.brittank88.adinfinitum.util;
 
 import org.jetbrains.annotations.Contract;
 
-public abstract class NumeralUtil {
+public abstract class NumeralUtils {
 
     /**
      * Returns the roman numeral representation of a given number, either in lowercase or uppercase.
