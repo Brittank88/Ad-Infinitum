@@ -18,7 +18,9 @@ import java.util.function.Function;
 
 public abstract class SingularityItem extends Item {
 
+    /** The {@link SingularityItem}'s default tier. */
     public static final int DEFAULT_TIER         = 1;
+    /** The default maximum tier that any {@link SingularityItem} can have. */
     public static final int DEFAULT_MAXIMUM_TIER = 5;
 
     private final int             tier    ;
@@ -26,7 +28,7 @@ public abstract class SingularityItem extends Item {
     private final OwoItemSettings settings;
 
     /**
-     * Constructs for classes extending {@link SingularityItem}.
+     * Constructs a {@link SingularityItem}.
      *
      * @param settings The {@link Settings} to use.
      * @param material The {@link ItemStack} to use as the material.
@@ -38,6 +40,13 @@ public abstract class SingularityItem extends Item {
         this.material = material;
         this.tier     = tier    ;
     }
+
+    /**
+     * Constructs a {@link SingularityItem} with the default tier.
+     *
+     * @param material The {@link ItemStack} to use as the material.
+     * @param settings The {@link OwoItemSettings} to use.
+     */
     public SingularityItem(ItemStack material, OwoItemSettings settings) { this(material, settings, DEFAULT_TIER); }
 
     /**

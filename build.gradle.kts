@@ -14,12 +14,12 @@ buildscript {
     }
 }
 
-val modVersion: String by project
-val mavenGroup: String by project
+val modVersion : String by project
+val mavenGroup : String by project
 
-val minecraftVersion        : String by project
-val fabricLoaderVersion     : String by project
-val fabricAPIVersion        : String by project
+val minecraftVersion    : String by project
+val fabricLoaderVersion : String by project
+val fabricAPIVersion    : String by project
 
 version = modVersion
 group   = mavenGroup
@@ -102,12 +102,12 @@ repositories {
 
 dependencies {
 
-    val yarnMappingsVersion     : String by project
-    val owoVersion              : String by project
-    val modMenuVersion          : String by project
-    val vigilanceMCVersion      : String by project
-    val vigilanceVersion        : String by project
-    val colorThiefVersion       : String by project
+    val yarnMappingsVersion : String by project
+    val owoVersion          : String by project
+    val modMenuVersion      : String by project
+    val vigilanceMCVersion  : String by project
+    val vigilanceVersion    : String by project
+    val colorThiefVersion   : String by project
 
     // To change the versions see the gradle.properties file.
     minecraft        (group = "com.mojang"  , name = "minecraft"    , version = minecraftVersion   )

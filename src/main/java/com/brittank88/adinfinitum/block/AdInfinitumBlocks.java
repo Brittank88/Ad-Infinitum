@@ -18,12 +18,21 @@ import net.minecraft.util.Identifier;
 
 import java.lang.reflect.Field;
 
+/**
+ * This class is used to register all the {@link Block blocks} in the mod.
+ *
+ * @author Brittank88
+ */
 public final class AdInfinitumBlocks implements BlockRegistryContainer {
 
+    /** Neutron Collector - A machine used to generate Neutronium material when supplied with energy. */
     @AssignedTab public static final Block NEUTRON_COLLECTOR = new NeutronCollectorBlock(FabricBlockSettings.of(Material.METAL).nonOpaque());
 
+    /** Neutronium Block - A block of Neutronium material. */
     @AssignedTab(tab = 1) public static final Block NEUTRONIUM_BLOCK = new NeutroniumBlock(FabricBlockSettings.of(Material.METAL).nonOpaque());
+    /** Crystal Matrix Block - A block of Crystal Matrix material. */
     @AssignedTab(tab = 1) public static final Block CRYSTAL_MATRIX_BLOCK = new CrystalMatrixBlock(FabricBlockSettings.of(Material.METAL).nonOpaque());
+    /** Infinity Block - A block of Infinity material. */
     @AssignedTab(tab = 1) public static final Block INFINITY_BLOCK = new InfinityBlock(FabricBlockSettings.of(Material.METAL).nonOpaque());
 
     @Override public void postProcessField(String namespace, Block value, String identifier, Field field) {

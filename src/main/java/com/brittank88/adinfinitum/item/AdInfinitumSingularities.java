@@ -3,6 +3,11 @@ package com.brittank88.adinfinitum.item;
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItemProcessingSubject;
 
+/**
+ * This class is used to register all the {@link com.brittank88.adinfinitum.api.registry.singularity.SingularityItem singularities} in the mod.
+ *
+ * @author Brittank88
+ */
 public final class AdInfinitumSingularities extends SingularityItemProcessingSubject {
 
     /*
@@ -27,5 +32,6 @@ public final class AdInfinitumSingularities extends SingularityItemProcessingSub
     public static final SingularityItem NETHER_STAR_SINGULARITY  = new SingularityItem(new ItemStack(Items.NETHER_STAR    ));
     */
 
+    /** Constructs a new {@link AdInfinitumSingularities} instance, which is simply a {@link SingularityItemProcessingSubject} with {@link AdInfinitum#MOD_ID} as the namespace. */
     public AdInfinitumSingularities() { super(AdInfinitum.MOD_ID); }
 }

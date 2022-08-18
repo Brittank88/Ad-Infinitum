@@ -18,8 +18,14 @@ import java.lang.reflect.Field;
 public abstract class SingularityItemProcessingSubject implements SimpleFieldProcessingSubject<SingularityItem> {
 
     // TODO: Migrate to usage of the @Identifier annotation.
+    /** The namespace of the {@link Identifier} each {@link SingularityItem} registered by this class will have. */
     public final String namespace;
 
+    /**
+     * Constructs a {@link SingularityItemProcessingSubject}.
+     *
+     * @param namespace The namespace of the {@link Identifier} each {@link SingularityItem} registered by this class will have.
+     */
     public SingularityItemProcessingSubject(@NotNull String namespace) { this.namespace = namespace; }
 
     @Override public void processField(SingularityItem value, String identifier, Field field) {

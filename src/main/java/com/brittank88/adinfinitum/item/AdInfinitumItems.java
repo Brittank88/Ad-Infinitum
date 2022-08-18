@@ -7,6 +7,11 @@ import net.minecraft.item.Item;
 
 import java.lang.reflect.Field;
 
+/**
+ * This class is used to register all the {@link Item items} in the mod.
+ *
+ * @author Brittank88
+ */
 public final class AdInfinitumItems implements ItemRegistryContainer {
 
     @Override public void afterFieldProcessing() { AdInfinitum.LOGGER.info("Registered " + RegistryUtils.getRegisteredAmount(net.minecraft.util.registry.Registry.ITEM, AdInfinitum.MOD_ID) + " items!"); }

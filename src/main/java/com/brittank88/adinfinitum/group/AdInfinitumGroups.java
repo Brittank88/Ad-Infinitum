@@ -13,8 +13,14 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.stream.IntStream;
 
+/**
+ * This class is used to register all the {@link OwoItemGroup item groups} in the mod.
+ *
+ * @author Brittank88
+ */
 public final class AdInfinitumGroups {
 
+    /** The main {@link OwoItemGroup item group} for the mod. */
     public static final OwoItemGroup GROUP_MAIN = new OwoItemGroup(AdInfinitum.id("group.main")) {
         @Override public ItemStack createIcon() { return new ItemStack(Items.IRON_INGOT); }
 
@@ -30,6 +36,7 @@ public final class AdInfinitumGroups {
         }
     };
 
+    /** The {@link OwoItemGroup item group} for the mod's singularities, with a {@link io.wispforest.owo.itemgroup.gui.ItemGroupTab tab} for each tier. */
     public static final OwoItemGroup GROUP_SINGULARITIES = new OwoItemGroup(AdInfinitum.id("group.singularities")) {
         @Override public ItemStack createIcon() { return new ItemStack(Registry.ITEM.get(AdInfinitum.id("cobblestone_singularity_mk-i"))); }
 
@@ -47,6 +54,7 @@ public final class AdInfinitumGroups {
         }
     };
 
+    /** Initialises the mod's {@link OwoItemGroup item groups}. */
     public static void register() {
 
         // Initialise the groups.

@@ -16,7 +16,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface AssignedTab {
+    /**
+     * Default tab index that the {@link net.minecraft.item.Item Item} is assigned to if no tab is specified.
+     *
+     * @see AssignedTab#tab()
+     */
     int DEFAULT_TAB_INDEX = 0;
 
+    /**
+     * @return The index of the {@link io.wispforest.owo.itemgroup.gui.ItemGroupTab ItemGroupTab} to assign the {@link net.minecraft.item.Item Item} to.
+     *         Defaults to {@link AssignedTab#DEFAULT_TAB_INDEX}.
+     */
     int tab() default DEFAULT_TAB_INDEX;
 }

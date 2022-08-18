@@ -16,5 +16,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WithDisplayName {
+    /** @return The display name for the {@link java.lang.reflect.Field Field} being processed. */
     @Nullable String name();
 }
