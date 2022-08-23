@@ -14,8 +14,8 @@ import java.nio.file.Files
 
 abstract class AnnotateClasses : DefaultTask() {
 
-    abstract val classDirectories    : ConfigurableFileCollection @InputFiles get
-    abstract val destinationDirectory: DirectoryProperty @OutputDirectory get
+    abstract val classDirectories    : ConfigurableFileCollection @InputFiles      get
+    abstract val destinationDirectory: DirectoryProperty          @OutputDirectory get
 
     @TaskAction
     fun annotate() {

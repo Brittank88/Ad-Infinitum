@@ -5,18 +5,18 @@ import java.io.File
 
 object AdInfinitumCommonConfig : Vigilant(File("./config/ad-infinitum-config.toml")) {
 
-    var demoCheckbox = false
+    // TODO: Include Fabric Language Kotlin
 
-    var demoSwitch = false
+    var demoCheckbox = false
+    var demoSwitch   = false
 
     init {
         category("Property Overview") {
-
-            subcategory("Subcategory 1") {
+            subcategory("Cringe") {
                 checkbox(::demoCheckbox, "Checkbox", "This is a checkbox property. It stores a boolean value.")
             }
 
-            subcategory("Subcategory 2") {
+            subcategory("Based") {
                 checkbox(::demoSwitch, "Switch", "This is a switch property. It stores a boolean value.")
             }
         }

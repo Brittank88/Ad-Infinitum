@@ -3,7 +3,7 @@ package com.brittank88.adinfinitum.group;
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.AdInfinitumAPI;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
-import com.brittank88.adinfinitum.util.NumeralUtils;
+import com.brittank88.adinfinitum.util.NumeralUtilsKt;
 import io.wispforest.owo.itemgroup.Icon;
 import io.wispforest.owo.itemgroup.OwoItemGroup;
 import net.minecraft.item.ItemStack;
@@ -11,6 +11,8 @@ import net.minecraft.item.Items;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -48,8 +50,8 @@ public final class AdInfinitumGroups {
             IntStream.range(1, SingularityItem.DEFAULT_MAXIMUM_TIER + 1)
                     .forEach(i -> addTab(
                             Icon.of(Items.DEBUG_STICK),
-                            "MK-" + NumeralUtils.toRomanNumeral(i, true),
-                            TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("singularity_mk-" + NumeralUtils.toRomanNumeral(i, false)))
+                            "MK-" + NumeralUtilsKt.getAsRomanNumerals(i),
+                            TagKey.of(Registry.ITEM_KEY, AdInfinitum.id("singularity_mk-" + Objects.requireNonNull(NumeralUtilsKt.getAsRomanNumerals(i)).toLowerCase(Locale.ROOT)))
                     ));
         }
     };

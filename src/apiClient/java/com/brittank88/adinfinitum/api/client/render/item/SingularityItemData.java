@@ -2,8 +2,9 @@ package com.brittank88.adinfinitum.api.client.render.item;
 
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
-import com.brittank88.adinfinitum.util.WordUtils;
-import com.brittank88.adinfinitum.util.client.ColourUtil;
+import com.brittank88.adinfinitum.util.WordUtilsKt;
+import com.brittank88.adinfinitum.util.client.ColourExtractionException;
+import com.brittank88.adinfinitum.util.client.ColourUtilKt;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -31,13 +32,13 @@ public record SingularityItemData(
          * By default, this is determined from the singularity's material's registry ID.
          */
         private final Function<ItemStack, String> displayName = stack ->
-                stack.getItem() instanceof SingularityItem si
-                        ? WordUtils.capitalizeFully(
-                                Registry.ITEM.getId(si.getMaterial().getItem())
-                                        .getPath()
-                                        .replaceFirst(" (block|ingot|dust|nugget|ore|rod|powder)", "")
-                        ) + " [MK-" + si.getTierNumeral() + ']'
-                        : "Unknown Singularity";
+            stack.getItem() instanceof SingularityItem si
+                ? WordUtilsKt.capitaliseFully(
+                    Registry.ITEM.getId(si.getMaterial().getItem())
+                        .getPath()
+                        .replaceFirst(" (block|ingot|dust|nugget|ore|rod|powder)", "")
+                ) + " [MK-" + si.getTierNumeral() + ']'
+                : "Unknown Singularity";
 
         /**
          * The singularity base {@link SpriteIdentifier}.
@@ -45,7 +46,7 @@ public record SingularityItemData(
          * By default, this is the sprite provided by Ad Infinitum.
          */
         private Function<ItemStack, SpriteIdentifier> baseSpriteIdentifier = stack -> new SpriteIdentifier(
-                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("textures/item/singularity/base.png")
+            PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("textures/item/singularity/base.png")
         );
 
         /**
@@ -54,7 +55,7 @@ public record SingularityItemData(
          * By default, this is the sprite provided by Ad Infinitum.
          */
         private Function<ItemStack, SpriteIdentifier> coreSpriteIdentifier = stack -> new SpriteIdentifier(
-                PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("textures/item/singularity/core.png")
+            PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, AdInfinitum.id("textures/item/singularity/core.png")
         );
 
         /**
@@ -80,9 +81,14 @@ public record SingularityItemData(
          * <br /><br />
          * The colour is determined by the most dominant colour of the {@link SingularityItem}'s {@link ItemStack material}'s {@link net.minecraft.client.texture.Sprite Sprite}.
          */
-        private ToIntFunction<ItemStack> colourFunction = stack -> stack.getItem() instanceof SingularityItem si
-                ? ColourUtil.extractProminentRGB(new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, Registry.ITEM.getId(si.getMaterial().getItem())))
-                : ColourUtil.DEFAULT_COLOUR;
+        private ToIntFunction<ItemStack> colourFunction = stack -> {
+            try {
+                return ColourUtilKt.extractProminentRGB(new SpriteIdentifier(
+                    PlayerScreenHandler.BLOCK_ATLAS_TEXTURE,
+                    Registry.ITEM.getId(((SingularityItem) stack.getItem()).getMaterial().getItem())
+                ));
+            } catch (ColourExtractionException e) { return ColourUtilKt.DEFAULT_COLOUR; }
+        };
 
         public Builder setBaseSpriteIdentifier(Function<ItemStack, SpriteIdentifier> baseSpriteIdentifier) {
             this.baseSpriteIdentifier = baseSpriteIdentifier;

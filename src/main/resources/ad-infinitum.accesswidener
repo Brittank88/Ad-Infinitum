@@ -1,3 +1,8 @@
-accessWidener v1 named
-accessible    field    net/minecraft/client/texture/Sprite    images    [Lnet/minecraft/client/texture/NativeImage;
-accessible    field    net/minecraft/client/texture/Sprite    animation    Lnet/minecraft/client/texture/Sprite$Animation;
+accessWidener v2 named
+
+# Sprite Image Data
+accessible    field    net/minecraft/client/texture/Sprite              images            [Lnet/minecraft/client/texture/NativeImage;
+accessible    field    net/minecraft/client/texture/Sprite              animation         Lnet/minecraft/client/texture/Sprite$Animation;
+
+# minecraft:builtin/entity
+accessible    field    net/minecraft/client/render/model/ModelLoader    BUILTIN_ENTITY    Ljava/lang/String;

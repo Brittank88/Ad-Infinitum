@@ -1,17 +1,15 @@
+@file:Suppress("UnstableApiUsage")
+
 import com.brittank88.gradle.AnnotateClasses
-import org.apache.commons.text.WordUtils
+import org.gradle.configurationcache.extensions.capitalized
+
+// TODO: KDoc task
 
 plugins {
     id("fabric-loom"  ).version("0.12-SNAPSHOT")
     id("maven-publish")
     java
-    kotlin("jvm").version("1.7.10") // TODO: Is this duplicated with what is in buildSrc?
-}
-
-buildscript {
-    dependencies {
-        classpath(group = "org.apache.commons", name = "commons-text"  , version = "latest.release")
-    }
+    kotlin("jvm").version("latest.release")
 }
 
 val modVersion : String by project
@@ -24,32 +22,11 @@ val fabricAPIVersion    : String by project
 version = modVersion
 group   = mavenGroup
 
-var datagenDir = layout.projectDirectory.dir("src").dir("client").dir("generated")
-
-@Suppress("UnstableApiUsage")
-loom {
-    splitEnvironmentSourceSets()
-
-    accessWidenerPath.set(file("src/main/resources/ad-infinitum.accesswidener"))
-    mixin.add(sourceSets["client"])
-
-    runs {
-        // This adds a new gradle task that runs the datagen API: "gradlew runDatagenClient"
-        create("datagenClient") {
-            inherit(runConfigs["client"])
-            name("Data Generation")
-            vmArgs(
-                "-Dfabric-api.datagen",
-                "-Dfabric-api.datagen.output-dir=${datagenDir}",
-                "-Dfabric-api.datagen.strict-validation"
-            )
-            ideConfigGenerated(true)
-            runDir("build/datagen")
-        }
-    }
-}
+loom.splitEnvironmentSourceSets()
 
 val client: SourceSet by sourceSets.getting
+
+val datagenDir = layout.projectDirectory.dir("src").dir(client.name).dir("generated")
 
 val util: SourceSet by sourceSets.creating {
     compileClasspath += configurations.compileClasspath.get()
@@ -85,6 +62,26 @@ sourceSets.named(client.name) {
 
     // Add the datagen-generated files into the jar.
     resources.srcDir(datagenDir)
+}
+
+loom {
+    accessWidenerPath.set(file("src/main/resources/ad-infinitum.accesswidener"))
+    mixin.add(client)
+
+    runs {
+        // This adds a new gradle task that runs the datagen API: "gradlew runDatagenClient"
+        create("datagenClient") {
+            inherit(runConfigs[client.name])
+            name("Data Generation")
+            vmArgs(
+                "-Dfabric-api.datagen",
+                "-Dfabric-api.datagen.output-dir=${datagenDir}",
+                "-Dfabric-api.datagen.strict-validation"
+            )
+            ideConfigGenerated(true)
+            runDir("build/datagen")
+        }
+    }
 }
 
 repositories {
@@ -126,7 +123,7 @@ dependencies {
     modRuntimeOnly(group = "com.terraformersmc", name = "modmenu", version = modMenuVersion)
 
     // Vigilance (https://github.com/EssentialGG/Vigilance)
-    modImplementation(include(group = "gg.essential", name = "vigilance-$vigilanceMCVersion-fabric", version = vigilanceVersion))
+    modImplementation(include(group = "gg.essential", name = "vigilance-$vigilanceMCVersion-fabric", version = vigilanceVersion)) { isChanging = true }
 
     // Color-Thief (https://mvnrepository.com/artifact/de.androidpit/color-thief)
     include(utilClient.implementationConfigurationName(group = "de.androidpit", name = "color-thief", version = colorThiefVersion))
@@ -148,6 +145,17 @@ java {
     }
 }
 
+// Skip unnecessary api variants.
+components.getByName("java") {
+    this as AdhocComponentWithVariants
+    withVariantsFromConfiguration(configurations[api.apiElementsConfigurationName    ]) { skip() }
+    withVariantsFromConfiguration(configurations[api.runtimeElementsConfigurationName]) { skip() }
+}
+
+// Clear unnecessary api artifacts and only keep api jar as an artifact.
+configurations.apiElements { artifacts.clear() }
+artifacts.apiElements(tasks.named(api.jarTaskName))
+
 tasks {
 
     processResources {
@@ -157,7 +165,7 @@ tasks {
         filesMatching("fabric.mod.json") {
             expand(mapOf(
                 "id" to project.name,
-                "name" to WordUtils.capitalizeFully(project.name.replace('-', ' ')),
+                "name" to project.name.split('-').joinToString(" ", transform = String::capitalized),
                 "version" to modVersion,
                 "fabricLoaderVersion" to ">=$fabricLoaderVersion",
                 "fabricVersion" to ">=$fabricAPIVersion",
