@@ -13,9 +13,9 @@ import net.minecraft.client.util.SpriteIdentifier
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.ColorHelper
+import net.minecraft.util.math.Matrix4f
 import java.io.ByteArrayInputStream
 import java.io.IOException
-import java.lang.Exception
 import java.util.function.ToIntFunction
 import javax.imageio.ImageIO
 
@@ -44,67 +44,49 @@ fun ItemStack.retrieveColourData() {
 
     val scaleFactor = client.window.scaleFactor
 
-    val framebufferSize = (16 * scaleFactor).toInt()
-    val framebuffer = SimpleFramebuffer(client.window.framebufferWidth, client.window.framebufferHeight, false, MinecraftClient.IS_SYSTEM_MAC)
+    val framebufferSize = (scaleFactor * 16).toInt()
+    val framebuffer = SimpleFramebuffer(framebufferSize, framebufferSize, false, MinecraftClient.IS_SYSTEM_MAC)
 
     framebuffer.beginWrite(false)
 
     // framebuffer.setClearColor(1f, 1f, 1f, 1f)
     // framebuffer.clear(MinecraftClient.IS_SYSTEM_MAC)
 
-    /*
-    val tessellator = Tessellator.getInstance()
-    val buffer = tessellator.buffer
+    run {
+        val originalProjectionMatrix = RenderSystem.getProjectionMatrix().copy()
+        val projectionMatrix         = Matrix4f.projectionMatrix(16f, -16f, 1000f, 3000f)
 
-    buffer.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR)
-    RenderSystem.disableBlend()
-    RenderSystem.disableDepthTest()
-    RenderSystem.disableCull()
-    RenderSystem.setShader(GameRenderer::getPositionColorShader)
-    buffer.vertex(0.0, 0.0, 0.0).color(1f, 1f, 0f, 1f).next()
-    buffer.vertex(framebufferSize.toDouble(), 0.0, 0.0).color(1f, 1f, 0f, 1f).next()
-    buffer.vertex(framebufferSize.toDouble(), framebufferSize.toDouble(), 0.0).color(1f, 1f, 0f, 1f).next()
-    tessellator.draw()
-    */
+        RenderSystem.setProjectionMatrix(projectionMatrix)
+        run {
 
-    val modelViewStack = RenderSystem.getModelViewStack()
+            val modelViewMatrix = Matrix4f.translate(8.0f, 8.0f, -2000.0f)
 
-    val vertexConsumer = client.bufferBuilders.entityVertexConsumers
+            val modelViewStack = RenderSystem.getModelViewStack().apply {
+                push()
+                loadIdentity()
+                multiplyPositionMatrix(modelViewMatrix)
+                scale(16f, -16f, 1.0f)
+            }
 
-    modelViewStack.push()
+            RenderSystem.applyModelViewMatrix()
 
-    //modelViewStack.translate(8.0, 8.0, 0.0)
-    modelViewStack.scale(16f, -16f, 0f)
-    RenderSystem.applyModelViewMatrix()
+            client.bufferBuilders.entityVertexConsumers.run {
+                client.itemRenderer.renderItem(this@retrieveColourData, ModelTransformation.Mode.GUI, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, MatrixStack(), this, 0)
+                draw()
+            }
 
-    /*
-        public void setScaleFactor(double d) {
-            this.scaleFactor = d;
-            int i = (int)((double)this.framebufferWidth / d);
-            this.scaledWidth = (double)this.framebufferWidth / d > (double)i ? i + 1 : i;
-            int j = (int)((double)this.framebufferHeight / d);
-            this.scaledHeight = (double)this.framebufferHeight / d > (double)j ? j + 1 : j;
+            modelViewStack.pop()
+
+            RenderSystem.applyModelViewMatrix()
+
         }
-     */
-
-    val matrixStack = MatrixStack()
-    matrixStack.push()
-    matrixStack.translate(client.window.scaledWidth / 32.0, client.window.scaledHeight / -32.0, 0.0)
-    matrixStack.scale(client.window.scaledWidth / 16f, client.window.scaledHeight / 16f, 0f)
-
-    client.itemRenderer.renderItem(this, ModelTransformation.Mode.GUI, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, matrixStack, vertexConsumer, 0)
-
-    vertexConsumer.draw()
-
-    matrixStack.pop()
-
-    modelViewStack.pop()
-
-    RenderSystem.applyModelViewMatrix()
+        RenderSystem.setProjectionMatrix(originalProjectionMatrix)
+    }
 
     client.framebuffer.beginWrite(false)
 
-    framebuffer.draw(framebufferSize, framebufferSize)
-
-    framebuffer.delete()
+    framebuffer.run {
+        draw(framebufferSize, framebufferSize)
+        delete()
+    }
 }
