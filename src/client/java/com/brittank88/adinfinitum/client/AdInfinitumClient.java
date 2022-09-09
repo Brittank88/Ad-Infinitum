@@ -2,13 +2,17 @@ package com.brittank88.adinfinitum.client;
 
 import com.brittank88.adinfinitum.AdInfinitum;
 import com.brittank88.adinfinitum.client.config.AdInfinitumCommonConfig;
+import com.brittank88.adinfinitum.util.client.ColourUtilKt;
 import gg.essential.elementa.effects.StencilEffect;
 import gg.essential.vigilance.Vigilance;
 import gg.essential.vigilance.Vigilant;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.PlayerScreenHandler;
 
 /**
@@ -37,6 +41,8 @@ public class AdInfinitumClient implements ClientModInitializer {
 
         // Start tracking ticks.
         ClientTickEvents.START_CLIENT_TICK.register(mc -> tickCount++);
+
+        HudRenderCallback.EVENT.register((i1, i2) -> ColourUtilKt.retrieveColourData(new ItemStack(Items.MAGMA_BLOCK)));
 
         // Register custom sprites.
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(this::registerSprites);

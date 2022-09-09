@@ -1,6 +1,6 @@
 package com.brittank88.adinfinitum.client.item;
 
-import com.brittank88.adinfinitum.api.client.registry.singularity.SingularityItemDataRegistry;
+import com.brittank88.adinfinitum.api.client.registry.singularity.SingularityItemDataRegistryKt;
 import com.brittank88.adinfinitum.api.client.render.item.SingularityItemData;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
 import com.brittank88.adinfinitum.client.AdInfinitumClient;
@@ -21,10 +21,10 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
 
     @Override public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
-        SingularityItemData sid = SingularityItemDataRegistry.getSingularities().get((SingularityItem) stack.getItem());
+        SingularityItemData sid = SingularityItemDataRegistryKt.getSingularities().get((SingularityItem) stack.getItem());
 
         // Get the singularity's colour.
-        int colour = sid.colourFunction().applyAsInt(stack);
+        int colour = sid.getColourFunction().applyAsInt(stack);
         float r = ColorHelper.Argb.getRed(colour);
         float g = ColorHelper.Argb.getGreen(colour);
         float b = ColorHelper.Argb.getBlue(colour);
@@ -45,7 +45,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
         matrices.push();
 
         // Rotate matrices.
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.baseRotationSpeed().apply(stack) * (tickCount + tickDelta)) % 360));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.getBaseRotationSpeed().apply(stack) * (tickCount + tickDelta)) % 360));
 
         // Get current normal and position matrix.
         entry          = matrices.peek();
@@ -53,7 +53,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
         normalMatrix   = entry.getNormalMatrix();
 
         // Draw base sprite.
-        VertexConsumer baseConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.baseSpriteIdentifier().apply(stack).getTextureId()));
+        VertexConsumer baseConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.getBaseSpriteIdentifier().invoke(stack).getTextureId()));
         baseConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         baseConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         baseConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
@@ -66,7 +66,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
 
         // Push and rotate matrices.
         matrices.push();
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.coreRotationSpeed().apply(stack) * (tickCount + tickDelta)) % 360));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion((sid.getCoreRotationSpeed().apply(stack) * (tickCount + tickDelta)) % 360));
 
         // Get current normal and position matrix.
         entry          = matrices.peek();
@@ -74,7 +74,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
         normalMatrix   = entry.getNormalMatrix();
 
         // Draw core sprite.
-        VertexConsumer coreConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.coreSpriteIdentifier().apply(stack).getTextureId()));
+        VertexConsumer coreConsumer = vertexConsumers.getBuffer(RenderLayer.getItemEntityTranslucentCull(sid.getCoreSpriteIdentifier().invoke(stack).getTextureId()));
         coreConsumer.vertex(positionMatrix, 1, 1, 0).color(r, g, b, a).texture(1, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         coreConsumer.vertex(positionMatrix, 0, 1, 0).color(r, g, b, a).texture(0, 0).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();
         coreConsumer.vertex(positionMatrix, 0, 0, 0).color(r, g, b, a).texture(0, 1).overlay(overlay).light(light).normal(normalMatrix, 0, 0, 1).next();

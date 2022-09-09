@@ -1,6 +1,6 @@
 package com.brittank88.adinfinitum.data.provider.model.bases;
 
-import com.brittank88.adinfinitum.api.client.registry.singularity.SingularityItemDataRegistry;
+import com.brittank88.adinfinitum.api.client.registry.singularity.SingularityItemDataRegistryKt;
 import com.brittank88.adinfinitum.block.AdInfinitumBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
@@ -25,7 +25,7 @@ public class AdInfinitumModelProvider extends FabricModelProvider {
     @Override public void generateItemModels(ItemModelGenerator itemModelGenerator) {
 
         // Singularity item models - parent minecraft:builtin/entity to support DIRs.
-        SingularityItemDataRegistry.getSingularities().forEach((si, sid) -> {
+        SingularityItemDataRegistryKt.getSingularities().forEach((si, sid) -> {
             itemModelGenerator.register(si, new Model(
                     Optional.of(new Identifier("minecraft", ModelLoader.BUILTIN_ENTITY)),
                     Optional.empty()

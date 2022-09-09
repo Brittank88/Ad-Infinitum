@@ -1,7 +1,6 @@
 package com.brittank88.adinfinitum.group;
 
 import com.brittank88.adinfinitum.AdInfinitum;
-import com.brittank88.adinfinitum.api.AdInfinitumAPI;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
 import com.brittank88.adinfinitum.util.NumeralUtilsKt;
 import io.wispforest.owo.itemgroup.Icon;
@@ -62,7 +61,5 @@ public final class AdInfinitumGroups {
         // Initialise the groups.
         GROUP_MAIN.initialize();
         GROUP_SINGULARITIES.initialize();
-
-        AdInfinitumAPI.LOGGER.info("Item groups registered!");
     }
 }
