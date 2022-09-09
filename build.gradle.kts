@@ -2,6 +2,7 @@
 
 import com.brittank88.gradle.AnnotateClasses
 import org.gradle.configurationcache.extensions.capitalized
+import javax.xml.transform.Source
 
 // TODO: KDoc task
 
@@ -28,37 +29,26 @@ val client: SourceSet by sourceSets.getting
 
 val datagenDir = layout.projectDirectory.dir("src").dir(client.name).dir("generated")
 
-val util: SourceSet by sourceSets.creating {
-    compileClasspath += configurations.compileClasspath.get()
-    runtimeClasspath += configurations.runtimeClasspath.get()
-}
+val util: SourceSet by sourceSets.creating { depends(sourceSets.main.get()) }
 val utilClient: SourceSet by sourceSets.creating {
-    compileClasspath += client.compileClasspath + util.output
-    runtimeClasspath += client.runtimeClasspath + util.output
+    extend(util)
+    depends(client)
 }
 val api: SourceSet by sourceSets.creating {
-    compileClasspath += configurations.compileClasspath.get() + util.output
-    runtimeClasspath += configurations.runtimeClasspath.get() + util.output
+    extend(util)
+    depends(sourceSets.main.get())
 }
 val apiClient: SourceSet by sourceSets.creating {
-    val apiClientSourceSets = util.output + utilClient.output + api.output
-    compileClasspath += client.compileClasspath + apiClientSourceSets
-    runtimeClasspath += client.runtimeClasspath + apiClientSourceSets
+    extend(util, utilClient, api)
+    depends(client)
 }
 val datagen: SourceSet by sourceSets.creating {
-    val datagenSourceSets = client.output + api.output + apiClient.output + util.output + utilClient.output
-    compileClasspath += client.compileClasspath + datagenSourceSets
-    runtimeClasspath += client.runtimeClasspath + datagenSourceSets
+    extend(client, api, apiClient, util, utilClient)
+    depends(client)
 }
-sourceSets.main {
-    val mainSourceSets = api.output + util.output
-    compileClasspath += mainSourceSets
-    runtimeClasspath += mainSourceSets
-}
+sourceSets.main { extend(api, util) }
 sourceSets.named(client.name) {
-    val clientSourceSets = api.output + apiClient.output + util.output + utilClient.output
-    client.compileClasspath += clientSourceSets
-    client.runtimeClasspath += clientSourceSets
+    extend(api, apiClient, util, utilClient)
 
     // Add the datagen-generated files into the jar.
     resources.srcDir(datagenDir)
@@ -125,8 +115,10 @@ dependencies {
     // Vigilance (https://github.com/EssentialGG/Vigilance)
     modImplementation(include(group = "gg.essential", name = "vigilance-$vigilanceMCVersion-fabric", version = vigilanceVersion)) { isChanging = true }
 
-    // Color-Thief (https://mvnrepository.com/artifact/de.androidpit/color-thief)
-    include(utilClient.implementationConfigurationName(group = "de.androidpit", name = "color-thief", version = colorThiefVersion))
+    // Smile-Kotlin (https://mvnrepository.com/artifact/com.github.haifengl/smile-kotlin)
+    implementation(include(group = "com.github.haifengl", name = "smile-kotlin", version = "latest.release")) {
+        exclude(group = "org.slf4j", module = "slf4j-api")
+    }
 }
 
 java {
@@ -215,4 +207,21 @@ tasks {
 fun registerAnnotateClassTaskForSourceSet(sourceSet: SourceSet) = project.tasks.registering(AnnotateClasses::class) {
     classDirectories.from(sourceSet.output)
     destinationDirectory.set(layout.buildDirectory.dir("annotatedClasses").map { it.dir(sourceSet.name) })
+}
+
+fun SourceSet.extend(vararg sourceSets: SourceSet) {
+    sourceSets.forEach {
+        configurations[apiConfigurationName           ].extendsFrom(configurations[it.apiConfigurationName           ])
+        configurations[implementationConfigurationName].extendsFrom(configurations[it.implementationConfigurationName])
+        configurations[runtimeOnlyConfigurationName   ].extendsFrom(configurations[it.runtimeOnlyConfigurationName   ])
+        configurations[compileOnlyConfigurationName   ].extendsFrom(configurations[it.compileOnlyConfigurationName   ])
+
+        runtimeClasspath += it.output
+        compileClasspath += it.output
+    }
+}
+
+fun SourceSet.depends(sourceSet: SourceSet) {
+    runtimeClasspath += sourceSet.runtimeClasspath
+    compileClasspath += sourceSet.compileClasspath
 }
