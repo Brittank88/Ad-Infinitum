@@ -1,4 +1,4 @@
-rootProject.name = "ad-infinitum"
+rootProject.name = "ad_infinitum"
 
 pluginManagement {
     repositories {

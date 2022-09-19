@@ -1,91 +1,99 @@
 package com.brittank88.adinfinitum.util.client.colour
 
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
-import org.jetbrains.annotations.Contract
-import org.jetbrains.annotations.Range
+/**
+ * A BGRA colour represented as a 32-bit integer.
+ *
+ * @author Brittank88
+ */
+@JvmInline value class Colour(private val _integer: Int) {
 
-@JvmInline value class Colour(val colour: Int) : Comparable<Colour> {
+    val integer get() = _integer
 
-    override fun toString() = "${javaClass.simpleName}(colour=0x${"%08X".format(colour)})"  // TODO: Cleanup, potentially move hex formatting to int extension function.
-    fun toARGBString() = "${javaClass.simpleName}(alpha=$alpha, red=$red, green=$green, blue=$blue))"
+    val blue  get() = (_integer shr 24) and 0xFF
+    val green get() = (_integer shr 16) and 0xFF
+    val red   get() = (_integer shr 8 ) and 0xFF
+    val alpha get() =  _integer         and 0xFF
 
-    val alpha : Int get() = (colour shr 24) and 0xFF
-    val red   : Int get() = (colour shr 16) and 0xFF
-    val green : Int get() = (colour shr 8 ) and 0xFF
-    val blue  : Int get() = colour          and 0xFF
+    val integerABGR get() = _integer.rotateRight(Byte.SIZE_BITS)
+    val integerARGB get() = Integer.reverseBytes(_integer)
+    val integerRGBA get() = integerARGB.rotateRight(Byte.SIZE_BITS)
 
-    constructor(colour: @Range(from = 0, to = Long.MAX_VALUE) Long): this(colour.toInt())
-    constructor(
-        red   : @Range(from = 0, to = 255) Int,
-        green : @Range(from = 0, to = 255) Int,
-        blue  : @Range(from = 0, to = 255) Int
-    ): this(red, green, blue, 255)
-    constructor(
-        red   : @Range(from = 0, to = 255) Int,
-        green : @Range(from = 0, to = 255) Int,
-        blue  : @Range(from = 0, to = 255) Int,
-        alpha : @Range(from = 0, to = 255) Int
-    ): this(alpha shl 24 or (red shl 16) or (green shl 8) or blue)
+    val minRGB  get() = minOf(red, green, blue)
+    val maxRGB  get() = maxOf(red, green, blue)
 
-    fun blend(other: Colour, pivot: Int) = blend(this, other, pivot)
+    fun hsl() = HSL(this)
+    fun hsb() = HSB(this)
+}
 
-    fun avg(others: List<Colour>) = Colour.avg(listOf(this) + others)
+/**
+ * HSL colour internally represented as a 32-bit BGR integer.
+ * @author Brittank88
+ * @see <a href="https://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/">Math behind colorspace conversions, RGB-HSL</a>
+ */
+@JvmInline value class HSL(private val _colour: Colour) {
 
-    /**
-     * Volume in colour space.
-     *
-     * @see <a href="https://github.com/SvenWoltmann/color-thief-java/blob/cf21511eb10b060122fa70b1cc8810145ac0434b/src/main/java/de/androidpit/colorthief/MMCQ.java#L87">Color Thief's VBox Volume</a>
-     */
-    fun volume(other: Colour) = ((red - other.red + 1) * (green - other.green + 1) * (blue - other.blue + 1))
+    val colour  get() = _colour
+    val integer get() = _colour.integer
 
-    operator fun plus (other: Colour) = Colour((red + other.red).coerceAtMost(255), (green + other.green).coerceAtMost(255), (blue + other.blue).coerceAtMost(255))
-    operator fun minus(other: Colour) = Colour((red - other.red).coerceAtLeast(0), (green - other.green).coerceAtLeast(0), (blue - other.blue).coerceAtLeast(0))
-    operator fun times(other: Colour) = Colour((red * other.red).coerceAtMost(255), (green * other.green).coerceAtMost(255), (blue * other.blue).coerceAtMost(255))
-    operator fun div  (other: Colour) = Colour(red / other.red.coerceAtLeast(1), green / other.green.coerceAtLeast(1), blue / other.blue.coerceAtLeast(1))
+    /** Range: `[0, 360]` */
+    val hue get() = 60 * when (_colour.maxRGB) {
+        _colour.red   -> ((_colour.green - _colour.blue ) * 255f) / (_colour.red   - _colour.minRGB)
+        _colour.green -> ((_colour.blue  - _colour.red  ) * 255f) / (_colour.green - _colour.minRGB) + 2f
+        else          -> ((_colour.red   - _colour.green) * 255f) / (_colour.blue  - _colour.minRGB) + 4f
+    }.let { if (it < 0) it + 360 else it }
 
-    override operator fun compareTo(other: Colour) = colour.compareTo(other.colour)
+    /** Range: `[0, 1]` */
+    val saturation get() = run {
 
-    operator fun plus (other: Int) = Colour(red + other, green + other, blue + other)
-    operator fun minus(other: Int) = Colour(red - other, green - other, blue - other)
-    operator fun times(other: Int) = Colour(red * other, green * other, blue * other)
-    operator fun div  (other: @Range(from = 1, to = Long.MAX_VALUE) Int) = Colour(red / other, green / other, blue / other)
+        val minRGB = _colour.minRGB / 255f
+        val maxRGB = _colour.maxRGB / 255f
 
-    fun toDoubleArray() = toDoubleArray(this)
+        when {
+            minRGB == maxRGB                  -> 0f
+            luminance(minRGB, maxRGB) <= 0.5f -> (maxRGB - minRGB) / (maxRGB + minRGB)
+            else                              -> (maxRGB - minRGB) / (2 - maxRGB - minRGB)
+        }
+    }
+
+    /** Range: `[0, 1]` */
+    val luminance get() = luminance(_colour.maxRGB / 255f, _colour.minRGB / 255f)
 
     companion object {
-
-        val BLACK = Colour(0x000000FF)
-        val WHITE = Colour(0xFFFFFFFF)
-        val RED   = Colour(0xFF0000FF)
-        val GREEN = Colour(0x00FF00FF)
-        val BLUE  = Colour(0x0000FFFF)
-
-        fun blend(
-            colour1: Colour,
-            colour2: Colour,
-            pivot: @Range(from = 0, to = 255) Int
-        ) = (pivot and 0xFF).let { Colour(
-            (colour1.red * (255 - it) + colour2.red * it) / 255,
-            (colour1.green * (255 - it) + colour2.green * it) / 255,
-            (colour1.blue * (255 - it) + colour2.blue * it) / 255
-        ) }
-
-        fun avg(colours: List<Colour>): Colour {
-
-            var red   = 0
-            var green = 0
-            var blue  = 0
-
-            colours.forEach {
-                red   += it.red
-                green += it.green
-                blue  += it.blue
-            }
-
-            return Colour(red, green, blue) / (colours.size + 1)
-        }
-
-        fun toDoubleArray(colour: Colour) = doubleArrayOf(colour.alpha.toDouble(), colour.red.toDouble(), colour.green.toDouble(), colour.blue.toDouble())
+        private fun luminance(max: Float, min: Float) = (max + min) * 0.5f
     }
+}
+
+/**
+ * HSB colour internally represented as a 32-bit BGR integer.
+ * @author Brittank88
+ * @see <a href="https://stackoverflow.com/a/14733008">Leszek Szary's Branch-less RGB to HSV Algorithm</a>
+ */
+@JvmInline value class HSB(private val _colour: Colour) {
+
+    val colour  get() = _colour
+    val integer get() = _colour.integer
+
+    /** Range: `[0, 255]` */
+    val hue get() = when (_colour.maxRGB) {
+        _colour.red   -> 43  * (_colour.green - _colour.blue ) / (_colour.red   - _colour.minRGB)
+        _colour.green -> 128 * (_colour.blue  - _colour.red  ) / (_colour.green - _colour.minRGB)
+        else          -> 214 * (_colour.red   - _colour.green) / (_colour.blue  - _colour.minRGB)
+    }
+
+    /** Range: `[0, 255]` */
+    val saturation get() = 255 * (1 - _colour.minRGB / _colour.maxRGB)
+
+    /** Range: `[0, 255]` */
+    val brightness get() = _colour.maxRGB
+}
+
+/**
+ * Compares colours by visual dominance (Coloured -> Near White -> Near Black).
+ * @author Brittank88
+ */
+class DominanceComparator(private val saturationThreshold: Float = 25.5f): Comparator<HSB> {
+
+    override fun compare(a: HSB, b: HSB) =
+        if (a.saturation < saturationThreshold && b.saturation < saturationThreshold) a.brightness - b.brightness
+        else a.saturation * a.brightness - b.saturation * b.brightness
 }

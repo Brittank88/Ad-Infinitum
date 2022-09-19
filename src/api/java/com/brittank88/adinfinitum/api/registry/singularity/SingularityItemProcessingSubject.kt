@@ -3,6 +3,7 @@ package com.brittank88.adinfinitum.api.registry.singularity
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem
 import io.wispforest.owo.itemgroup.OwoItemSettings
 import io.wispforest.owo.registration.reflect.SimpleFieldProcessingSubject
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import java.lang.RuntimeException
@@ -27,9 +28,11 @@ abstract class SingularityItemProcessingSubject(private val namespace: String) :
     }
 
     private fun processSingularity(value: SingularityItem, identifier: String, field: Field) {
-        val sID = Identifier(namespace, identifier + "_mk-" + (
-                value.tierNumeral?.lowercase() ?: throw RuntimeException("Failed to generate ID for singularity '$value' - Numeral was null for tier '${value.tier}'!")
-        ))
+        val sID = Identifier(
+            namespace,
+            "${identifier}_mk_${value.tierNumeral?.lowercase() ?:
+                throw RuntimeException("Failed to generate ID for singularity '$value' - Numeral was null for tier '${value.tier}'!")}"
+        )
 
         // Register singularity item.
         Registry.register(Registry.ITEM, sID, value)

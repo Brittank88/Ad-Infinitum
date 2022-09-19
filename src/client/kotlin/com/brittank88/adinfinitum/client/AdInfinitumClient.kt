@@ -2,20 +2,15 @@ package com.brittank88.adinfinitum.client
 
 import com.brittank88.adinfinitum.AdInfinitum
 import com.brittank88.adinfinitum.client.config.AdInfinitumCommonConfig
-import com.brittank88.adinfinitum.util.client.colour.ItemStackDominantColourExtractor.extractDominantColour
+import com.brittank88.adinfinitum.api.client.registry.singularity.singularities
+import com.brittank88.adinfinitum.client.item.SingularityItemRenderer
 import gg.essential.elementa.effects.StencilEffect
 import gg.essential.vigilance.Vigilance.initialize
-import gg.essential.vigilance.Vigilant
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
+import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.texture.SpriteAtlasTexture
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.screen.PlayerScreenHandler
 
 /**
@@ -34,13 +29,13 @@ class AdInfinitumClient : ClientModInitializer {
         // Register config.
         registerConfig()
 
-        val testItemStack = ItemStack(Items.MAGMA_BLOCK)
-
-        // TODO: Find some callback that occurs at the end of ALL possible rendering.
-        WorldRenderEvents.END.register(WorldRenderEvents.End { testItemStack.extractDominantColour() })
-
         // Register custom sprites.
         registerSprites()
+
+        // Register DIR for singularities.
+        // TODO: Move to own function.
+        // TODO: Need to figure out how to assign minecraft:builtin/entity to these items.
+        singularities.forEach { (si, _) -> BuiltinItemRendererRegistry.INSTANCE.register(si, SingularityItemRenderer()) }
 
         // TODO: Migrate all client-side stuff like lang to the client (client entrypoint runs after common entrypoint anyways).
     }

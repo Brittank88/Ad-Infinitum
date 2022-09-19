@@ -55,7 +55,7 @@ sourceSets.named(client.name) {
 }
 
 loom {
-    accessWidenerPath.set(file("src/main/resources/ad-infinitum.accesswidener"))
+    accessWidenerPath.set(file("src/main/resources/ad_infinitum.accesswidener"))
     mixin.add(client)
 
     runs {

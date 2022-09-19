@@ -21,7 +21,7 @@ public final class AdInfinitum implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
 
     /** Main {@link String ID} of the mod. */
-    public static final String MOD_ID = "ad-infinitum";
+    public static final String MOD_ID = "ad_infinitum";
 
     /**
      * Returns an {@link Identifier} with the {@link #MOD_ID} as the namespace, and the supplied {@link String path} as the path.

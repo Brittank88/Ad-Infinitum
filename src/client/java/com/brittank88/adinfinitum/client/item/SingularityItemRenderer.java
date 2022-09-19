@@ -1,7 +1,7 @@
 package com.brittank88.adinfinitum.client.item;
 
 import com.brittank88.adinfinitum.api.client.registry.singularity.SingularityItemDataRegistryKt;
-import com.brittank88.adinfinitum.api.client.render.item.SingularityItemData;
+import com.brittank88.adinfinitum.api.client.render.item.SingularityItemRenderData;
 import com.brittank88.adinfinitum.api.registry.singularity.SingularityItem;
 import com.brittank88.adinfinitum.client.AdInfinitumClient;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
@@ -21,7 +21,7 @@ public class SingularityItemRenderer implements BuiltinItemRendererRegistry.Dyna
 
     @Override public void render(ItemStack stack, ModelTransformation.Mode mode, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
 
-        SingularityItemData sid = SingularityItemDataRegistryKt.getSingularities().get((SingularityItem) stack.getItem());
+        SingularityItemRenderData sid = SingularityItemDataRegistryKt.getSingularities().get((SingularityItem) stack.getItem());
 
         // Get the singularity's colour.
         int colour = sid.getColourFunction().applyAsInt(stack);

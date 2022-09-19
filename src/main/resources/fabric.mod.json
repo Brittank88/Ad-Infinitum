@@ -11,7 +11,7 @@
     "website": "https://github.com/Brittank88"
   },
   "license": "MIT",
-  "icon": "assets/ad-infinitum/icon.png",
+  "icon": "assets/ad_infinitum/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -28,9 +28,9 @@
     ]
   },
   "mixins": [
-    "ad-infinitum.mixins.json"
+    "ad_infinitum.mixins.json"
   ],
-  "accessWidener": "ad-infinitum.accesswidener",
+  "accessWidener": "ad_infinitum.accesswidener",
   "depends": {
     "fabricloader": "${fabricLoaderVersion}",
     "fabric": "${fabricVersion}",
